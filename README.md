@@ -1,7 +1,5 @@
 # Movie Ticket Booker
 
-## Movie Ticket Booking System
-
 ## Team Members
 - Dixaben Patel
 - Edward Chung
