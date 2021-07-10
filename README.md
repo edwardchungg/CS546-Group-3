@@ -1,18 +1,18 @@
 # Movie Ticket Booker
 
-Movie Ticket Booking System
+## Movie Ticket Booking System
 
-Team Members
-Dixaben Patel
-Edward Chung
-Yang Dai
+## Team Members
+- Dixaben Patel
+- Edward Chung
+- Yang Dai
 
-Brief Description
+## Brief Description
 A website that allows customers to book movie tickets and managers to manage booked tickets.
 
 
 
-- Core Features
+### Core Features
 - Landing Page
 Lists a bunch of movies, each containing a small synopsis, critic reviews, and a rating.
 Users would have to sign in first.
@@ -33,7 +33,7 @@ Based on time, the theater, and the movie: the user will be able to book ticket(
 - Sign in Page 
 Register as a manager or a customer
 Sign in with username and password
-- Extra Features
+### Extra Features
 - Movie Recommendations
 Based on the movie selected, the customer can see movie recommendations
 - Movie Reviews
