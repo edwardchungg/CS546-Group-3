@@ -6,28 +6,20 @@
 - Yang Dai
 
 ## Brief Description
-A website that allows customers to book movie tickets and managers to manage booked tickets.
-
-
+Build up an auto-management system to help a flooring corporation to manage the orders, deliveries and its inventory.
 
 ### Core Features
-- Landing Page
-Lists a bunch of movies, each containing a small synopsis, critic reviews, and a rating.
-Users would have to sign in first.
-Upon clicking on a movie, the user is able to see more detailed information.
-- Movie Page ( Each movie has their own Movie Page )
-  - Customers
-    - Detailed Information about the movie
-    - Summary, Reviews, Cast, Ticket Price 
-    - See the theatres and seat availability
-    - Book button 
-  - Manager
-    - Detailed Information about the movie
-    - Summary, Reviews, Cast,  
-    - See the theatres and seat availability
-    - See ticket sale analytics
-- Booking Page
-  - Based on time, the theater, and the movie: the user will be able to book ticket(s). 
+- Log-in page: (The first page)
+  - sign up or log page and according to user will direct to different sub-pages.
+- Inventory page: (Owner and warehouse managers only)
+    -  Check all productions (floorings, tiles, paints, accessories)
+    -  Find one production, then can modify/ delete it; and also can check its information (inventory, purchasing history, next time to purchase new production from factories) 
+    -  add new production.
+- Sellers page: (Owner and sellers only)
+  - add new orders.
+  - check existed orders, then can modify/ delete this order. and also can see its selling information (selling price, amount, delivery information).
+  - check production’s information (inventory, suggested purchasing next date, sales).
+  - complete the order (owner and sellers only) ——— there are two status of the delivery.
 - Sign in Page 
   - Register as a manager or a customer
   - Sign in with username and password
