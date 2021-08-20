@@ -2,6 +2,102 @@
     <div id="createOrderContent">
 		<header id="createOrderHeader">
 		    <h3 id="createOrderTitle">Create a new order</h3>
-		</header>        
+		</header>   
+
+		<!-- New order's information fill up-->   
+		<form id="createOrderForm" action="/create_order" method="post" enctype="multipart/form-data">
+			<p>I. Fill in customer's information</p>
+			<div class="formSection">
+				<h4 class="formSectionTitle">Name</h4>
+					<input id="firstName" class="formTextInput" type="text" name="firstName" placeholder="First Name" maxlength="30" required>
+					<input id="lastName" class="formTextInput" type="text" name="lastName" placeholder="Last Name" maxlength="30" required>
+			</div>
+
+            <div class="formSection">
+				<h4 class="formSectionTitle">Phone Number</h4>
+					<input id="phone" class="formTextInput" type="number" name="phone" placeholder="Phone Number" maxlength="30" required>
+			</div>
+
+            <div class="formSection">
+				<h4 class="formSectionTitle">Adress</h4>
+					<input id="adress" class="formTextInput" type="text" name="adress" placeholder="Adress" maxlength="90" required>
+			</div>	
+
+			<p>II. Fill in production's information</p>	
+            <div class="formSection">
+                <h4 class="formSectionTitle">Wood Type</h4>
+                    <form>
+                        <input id="oak" class="formTextInput" type="radio" name="woodType" value="Oak" checked="checked">
+                        <label for="oak">Oak</label><br>
+                        <input id="maple" class="formTextInput" type="radio" name="woodType" value="Maple">
+                        <label for="maple">Maple</label><br>
+                        <input id="hickory" class="formTextInput" type="radio" name="woodType" value="Hickory">
+                        <label for="hickory">Hickory</label>
+                    </form>
+            </div>
+			
+            <div class="formSection">
+                <h4 class="formSectionTitle">Color</h4>
+                    <form>
+                        <input id="yellow" class="formTextInput" type="radio" name="color" value="Yellow" checked="checked">
+                        <label for="yellow">Yellow</label><br>
+                        <input id="red" class="formTextInput" type="radio" name="color" value="Red">
+                        <label for="red">Red</label><br>
+                        <input id="black" class="formTextInput" type="radio" name="color" value="Black">
+                        <label for="black">Black</label>
+                    </form>
+            </div>	
+			
+            <div class="formSection">
+                <h4 class="formSectionTitle">Manufacture</h4>
+                    <form>
+                        <input id="m1" class="formTextInput" type="radio" name="manufacture" value="M1" checked="checked">
+                        <label for="m1">M1</label><br>
+                        <input id="m2" class="formTextInput" type="radio" name="manufacture" value="M2">
+                        <label for="m2">M2</label><br>
+                        <input id="m3" class="formTextInput" type="radio" name="manufacture" value="M3">
+                        <label for="m3">M3</label>
+                    </form>
+            </div>
+
+            <div class="formSection">
+                <h4 class="formSectionTitle">Delivery Choice</h4>
+                    <form>
+                        <input id="delivery" class="formTextInput" type="radio" name="deliveryChoice" value="Delivery" checked="checked">
+                        <label for="delivery">Delivery</label><br>
+                        <input id="pickup" class="formTextInput" type="radio" name="deliveryChoice" value="Pickup">
+                        <label for="pickup">Pickup</label>
+                    </form>
+            </div>			
+
+			<p>III. Fill in financial information</p>	
+            <div class="formSection">
+				<h4 class="formSectionTitle">Price (per sqt) $</h4>
+					<input id="priceSQT" class="formTextInput" type="number" name="priceSQT" placeholder="0" maxlength="30" required>
+			</div>	
+
+            <div class="formSection">
+				<h4 class="formSectionTitle">Area (in sqt)</h4>
+					<input id="area" class="formTextInput" type="number" name="area" placeholder="0" maxlength="30" required>
+			</div>	
+			
+            <div class="formSection">
+				<h4 class="formSectionTitle">Discount (%)</h4>
+					<input id="discount" class="formTextInput" type="number" name="discount" placeholder="100" maxlength="30" required>
+			</div>
+
+            <div class="formSection">
+				<h4 class="formSectionTitle">Delivery Fee $</h4>
+					<input id="deliveryfee" class="formTextInput" type="number" name="deliveryfee" placeholder="0" maxlength="30" required>
+			</div>	
+
+            <div class="formSection">
+				<h4 class="formSectionTitle">tax (%)</h4>
+					<input id="tax" class="formTextInput" type="number" name="tax" placeholder="8.75" maxlength="30" required>
+			</div>
+
+			<p class="error"></p>
+			<input id="submitButton" type="submit" value="Create an new order">																													
+		</form>  
     </div>
 </main>
