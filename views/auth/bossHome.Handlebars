@@ -1,13 +1,19 @@
 <main>
-    <div>
-        <h2>Redirection</h2>
-        <!-- redicrect from bossHome page to other sub pages-->
+    <div id="bossContent">
+        <header id="bossHeader">
+            <h2 id="bossTitle">Redirection</h2>
+        </header>
+
+        <!-- redicrect from bossHome page to other title's sub pages-->
         <ul>
             <button type="button" onclick="gotoSellers()">Sellers Page</button><br>
             <button type="button" onclick="gotoInventory()">Inventory Page</button><br>
             <button type="button" onclick="gotoDelivery()">Delivery Page</button><br>
             <button type="button" onclick="gotoFinancial()">Financial Page</button>
-
         </ul>
+
+		<div id="logoutContent">
+			<a id="logoutLink" href="auth/logout">Log out</a>
+		</div>          
     </div>
 </main>
