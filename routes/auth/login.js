@@ -4,21 +4,23 @@ const bcrypt = require('bcrypt');
 
 
 
-router.get('/', async (req, res) => {
-    /* render a view with a login form for a username and password */
+ronst express = require('express');
+const router = express.Router();
 
+//login handle
+router.get('/login',(req,res)=>{
+    res.render('login');
+})
+router.get('/register',(req,res)=>{
+    res.render('register')
+    })
+//Register handle
+router.post('/register',(req,res)=>{
+})
+router.post('/login',(req,res,next)=>{
+  })
 
-	//res.render('auth/login');
-});
-
-
-
-router.post('/', async (req, res) => {
-    /*attempt to log in a use with the login form */
-
-    //res.render('auth/login');
-});
-
-
-
-module.exports = router;
+//logout
+router.get('/logout',(req,res)=>{
+ })
+module.exports  = router;
