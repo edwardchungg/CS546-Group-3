@@ -1,0 +1,29 @@
+{
+  "name": "cs546-group-3",
+  "version": "1.0.0",
+  "description": "- Dixaben Patel\r - Edward Chung\r - Yang Dai",
+  "main": "index.js",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.3",
+    "express-session": "^1.17.2",
+    "handlebars": "^4.7.7",
+    "mongodb": "^4.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edwardchungg/CS546-Group-3.git"
+  },
+  "author": "Edward Chung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edwardchungg/CS546-Group-3/issues"
+  },
+  "homepage": "https://github.com/edwardchungg/CS546-Group-3#readme"
+}
