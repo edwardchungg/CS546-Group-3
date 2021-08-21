@@ -26,6 +26,15 @@ let exportedMethods = {
         if (!foundUser ) throw 'User not found';
         return foundUser;    
     },
+    async getByEmail(email){
+        if (!email) throw 'You must provide a Email';
+        if (typeof email != "string") throw 'email must be of type string';
+        
+        const userCollection = await users();
+        const foundUser = await userCollection.findOne({email: email});
+        if (!foundUser ) throw 'User not found';
+        return foundUser;    
+    },
     async getByUsername(username){
         if (!username) throw 'You must provide a username to search for';
         if (typeof username != "string") throw 'Username must be of type string';
