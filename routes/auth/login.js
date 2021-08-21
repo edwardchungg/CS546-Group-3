@@ -2,11 +2,6 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require('bcrypt');
 
-
-
-ronst express = require('express');
-const router = express.Router();
-
 //login handle
 router.get('/login',(req,res)=>{
     res.render('login');
