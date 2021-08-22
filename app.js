@@ -1,21 +1,31 @@
 const express = require("express");
 const app = express();
-const configRoutes = require('./routes');
 const cookieParser = require('cookie-parser');
-
+const exphbs = require("express-handlebars");
 const session = require("express-session");
+const configRoutes = require('./routes');
+
+const applyMiddleware = (app) =>
+  app
+    .use(express.json())
+    .use(express.urlencoded({ extended: true }))
+    .use(
+      session({
+        name: "AuthCookie",
+        secret: "some secret string!",
+        resave: false,
+        saveUninitialized: true,
+      })
+    )
+    .engine("handlebars", exphbs({ defaultLayout: "welcome", layoutsDir: __dirname + '/views' }))
+    .set("view engine", "handlebars");
+
 
 // to  use  static css or js 
 const static = express.static(__dirname + "/public");
 app.use("/public", static);
 
 app.use(cookieParser());
-app.use(session({
-  name: 'AuthCookie',
-  secret: 'some secret string!',
-  resave: false,
-  saveUninitialized: true,
-}));
 
 app.use( async(req, res, next) =>{
   let currentTimestamp = new Date().toUTCString();
@@ -33,7 +43,7 @@ app.use( async(req, res, next) =>{
 });
 
 app.use("/auth/login", (req, res, next) => {
-  if (!req.session.user && req.method === "GET") {
+  if (req.method === "GET") {
     return res.status(200).render("auth/login");
   } else {
     next();
@@ -41,22 +51,14 @@ app.use("/auth/login", (req, res, next) => {
 });
 
 app.use("/auth/register", (req, res, next) => {
-  if (!req.session.user && req.method === "GET") {
+  if (req.method === "GET") {
     return res.status(200).render("auth/signup");
   } else {
     next();
   }
 });
 
-const exphbs = require("express-handlebars");
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.engine("handlebars", exphbs({ defaultLayout: "main"}));
-app.set("view engine", "handlebars");
-app.use(express.json());
-
+applyMiddleware(app);
 configRoutes(app);
 
 app.listen(3000, () => {

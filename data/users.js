@@ -35,6 +35,14 @@ let exportedMethods = {
         if (!foundUser ) throw 'User not found';
         return foundUser;    
     },
+    async emailExists(email){
+        if (!email) throw 'You must provide a Email';
+        if (typeof email != "string") throw 'email must be of type string';
+        
+        const userCollection = await users();
+        const foundUser = await userCollection.findOne({email: email});
+        return !!foundUser; 
+    },
     async getByUsername(username){
         if (!username) throw 'You must provide a username to search for';
         if (typeof username != "string") throw 'Username must be of type string';
@@ -42,6 +50,16 @@ let exportedMethods = {
         const userCollection = await users();
         const foundUser = await userCollection.findOne({username: username});
         if (!foundUser ) throw 'User not found';
+        return foundUser;    
+    },
+    async checkUser(username, password){
+        if (!username) throw 'You must provide a username to search for';
+        if (typeof username != "string") throw 'Username must be of type string';
+        
+        const userCollection = await users();
+        const foundUser = await userCollection.findOne({username: username});
+        if (!foundUser ) throw 'User not found';
+        if(foundUser.hashedPassword != password) throw "Invalid Password"
         return foundUser;    
     },
     async create(firstName, lastName, email, username, userRole, address, password){
@@ -72,7 +90,7 @@ let exportedMethods = {
             username: username,
             userRole: userRole,
             address: address,
-            hashedPassword: hashedPassword
+            hashedPassword: password
         }
         const userCollection = await users();
         const insertInfo = await userCollection.insertOne(newUser);

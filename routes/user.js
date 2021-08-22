@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const bcrypt = require('bcrypt');
+const xss = require('xss');
 const saltRounds = 16;
 const usersData = data.users;
 
@@ -12,6 +13,102 @@ router.get('/', async (req, res) => {
         res.render('auth/login');
     }
 });
+
+
+router.post("/login", async (req, res) => {
+    let User = JSON.parse(JSON.stringify(req.body));
+  
+    if (!req.body) {
+      res.status(400).json({ error: "You must provide body" });
+      return;
+    }
+    if (!User.username) {
+      res.status(400).json({ error: "Email cant be empty" });
+      return;
+    }
+    if (!User.password) {
+      res.status(400).json({ error: "Password cant be empty" });
+      return;
+    }
+    try {
+      User.username = User.username.toLowerCase();
+      if (await usersData.checkUser(User.username, User.password)) {
+        req.session.user = await usersData.getByUsername(User.username);
+        res.cookie("name", "auth_cookie");
+        res.redirect("/private");
+      } else {
+        res.redirect("auth/login");
+       
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({ error: e });
+    }
+  });
+
+router.post("/register", async (req, res) => {
+    let newUser = JSON.parse(JSON.stringify(req.body));
+  
+    if (!req.body) {
+      res.status(400).json({ error: "You must provide body" });
+      return;
+    }
+    if (!newUser.userName) {
+      res.status(400).json({ error: "You must provide Username" });
+      return;
+    }
+    if (!newUser.email) {
+      res.status(400).json({ error: "You must provide email" });
+      return;
+    }
+    if (newUser.newPassword.length < 8) {
+      res.status(400).json({ error: "Your password must has at last 8 digits" });
+      return;
+    }
+    if (newUser.newPassword != newUser.confirmPassword) {
+        res.status(400).json({ error: "Comfirm password does not match" });
+        return;
+      }
+    if (!newUser.firstName) {
+      res.status(400).json({ error: "You must provide first name" });
+      return;
+    }
+    if (!newUser.lastName) {
+      res.status(400).json({ error: "You must provide last name" });
+      return;
+    }
+    if (!newUser.address) {
+      res.status(400).json({ error: "You must provide address" });
+      return;
+    }
+    if (!newUser.userRole) {
+      res.status(400).json({ error: "You must provide userRole" });
+      return;
+    }
+  
+    try {
+      // Always converts the email to lowercase
+      newUser.email = newUser.email.toLowerCase();
+      if (await usersData.emailExists(newUser.email)) {
+        res.json({ message: "user already exist." });
+      } else {
+        await usersData.create(
+          xss(newUser.firstName),
+          xss(newUser.lastName),
+          xss(newUser.email),
+          xss(newUser.userName),
+          xss(newUser.userRole),
+          xss(newUser.address),
+          xss(newUser.newPassword),
+        );
+        req.session.user = await usersData.getByEmail(newUser.email);
+        res.cookie("name", "auth_cookie");
+        res.redirect("/private");
+      }
+    } catch (e) {
+      res.status(500).json({ error: e });
+    }
+  });
 
 router.get('/:id', async (req, res) => {
     //TODO set cookies to authenticate user

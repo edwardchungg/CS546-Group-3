@@ -5,7 +5,7 @@
 		</header>
 
         <!-- New account's information fill up-->
-        <form id="signupForm" action="/signup" method="post" enctype="multipart/form-data">
+        <form id="signupForm" action="/user/register" method="post">
 			<div class="formSection">
 				<h4 class="formSectionTitle">Name</h4>
 					<input id="firstName" class="formTextInput" type="text" name="firstName" placeholder="First Name" maxlength="30" required>
@@ -18,25 +18,23 @@
 			</div>
 
             <div class="formSection">
-				<h4 class="formSectionTitle">Adress</h4>
-					<input id="adress" class="formTextInput" type="text" name="adress" placeholder="Adress" maxlength="90" required>
+				<h4 class="formSectionTitle">Address</h4>
+					<input id="address" class="formTextInput" type="text" name="address" placeholder="Address" maxlength="90" required>
 			</div>
 
             <div class="formSection">
                 <h4 class="formSectionTitle">Job Title</h4>
-                    <form>
-                        <input id="boss" class="formTextInput" type="radio" name="title" value="Boss">
-                        <label for="boss">Boss</label><br>
-                        <input id="seller" class="formTextInput" type="radio" name="title" value="Seller" checked="checked">
-                        <label for="seller">Seller</label><br>
-                        <input id="warehouseManager" class="formTextInput" type="radio" name="title" value="Warehouse Manager">
-                        <label for="warehouseManager">Warehouse Manager</label>
-                    </form>
+					<input id="boss" class="formTextInput" type="radio" name="userRole" value="Boss">
+					<label for="boss">Boss</label><br>
+					<input id="seller" class="formTextInput" type="radio" name="userRole" value="Seller" checked="checked">
+					<label for="seller">Seller</label><br>
+					<input id="warehouseManager" class="formTextInput" type="radio" name="userRole" value="Warehouse Manager">
+					<label for="warehouseManager">Warehouse Manager</label>
             </div>
 
             <div class="formSection">
 				<h4 class="formSectionTitle">Username</h4>
-					<input id="username" class="formTextInput" type="username" name="username" placeholder="Username" maxlength="30" required>
+					<input id="username" class="formTextInput" type="username" name="userName" placeholder="Username" maxlength="30" required>
 			</div>
 
 			<div class="formSection">
