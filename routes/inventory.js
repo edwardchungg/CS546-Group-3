@@ -2,7 +2,8 @@ const data = require('../data');
 const inventoryData = data.inventory;
 const express = require('express');
 const router = express.Router();
-
+const userData = data.users;
+const orderData = data.orderData;
 
 
 router.get('/', async (req, res) => {
