@@ -1,87 +1,109 @@
 const express = require('express');
 const router = express.Router();
-const usersData = require('../data/users');
+const data = require('../data');
 const bcrypt = require('bcrypt');
+const saltRounds = 16;
+const usersData = data.users;
 
-
-// login page - existing user
-
-router.post("/login", async (req, res) => {
-  // try {
-    if (typeof req.body.username !== 'string') return res.json({error: `Username must be a string and is casesensitive `});
-    if (typeof req.body.password !== 'string') return res.json({error: `Password must be a string and greater than 6 charatcer`});
-
-    let user = await usersData.getByUsername(req.body.username);
-    if (user === null) {
-      return res.json({error: 'Invalid Username'});
-    }else{
-      let match = await bcrypt.compare(req.body.password, user.password);
-      if (!match) {
-        return res.json({error: 'Incorrect password'});
-      }
-      // user visibility 
-      req.session.user = user;
-      res.json({ user }); 
-    }
-    
-  // } catch(e) {
-    // res.status(500).send();
-  // }
-})
-
-// Register - new User
-
-router.post("/register", async (req, res) => {
-  try {
-    const { firstName, lastName, email, username, userRole, address, password } = req.body;
-    const newUser = req.body
-    let errors = [];
-    if (!firstName || !lastName || !email || !username || !userRole || !address || !password) {
-        errors.push({ msg: "All field are require! Please fill in all fields" })
-    }
-
-    //check if password is more than 6 characters
-    if (password.length < 6) {
-        errors.push({ msg: 'password atleast 6 characters' })
-    }
-    if (errors.length > 0) {
-        res.render('register', {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            username: username,
-            userRole: userRole,
-            address: address,
-        })
+router.get('/', async (req, res) => {
+    if (req.session.user) {
+        res.redirect('/post');
     } else {
-        //validation passed
-        let existEmail = await usersData.getByEmail(email);
-            if (existEmail) {
-                errors.push({ msg: 'email already registered' });
-                render(res, errors,  username, email, password);
-
-            } else {
-            
-                    let user = await usersData.create(newUser);
-                    req.session.user = user;
-                    res.json({ user });    
-             }
+        res.render('auth/login');
     }
-  } catch(e) {
-    res.status(500).send();
-  }
-})
+});
 
-// logout
+router.get('/:id', async (req, res) => {
+    //TODO set cookies to authenticate user
+    if (!req.session.user) {
+        res.render('/auth/login');
+    }
+    try {
+        let user = await usersData.getUserById(req.params.id); // ID string
+        res.render('/auth/userpage', user);  //send user data to the profile page
+    } catch (e) {
+        res.render('/auth/error', { error: 'User not found' });
+    }
+});
 
-router.get("/logout", async (req, res) => {
-    // trigger /logout router to logout
-    res.clearCookie("AuthCookie");
-    res.clearCookie("Build Session");
-    req.session.destroy();
-    res.status(200).redirect("/user");
-  });
+//user update info
+router.patch('/:id', async (req, res) => {
+    //TODO set cookies to authenticate user
+    if (!req.session.user) {
+        res.render('/auth/login');
+    }
 
+    try {
+        await usersData.getUserById(req.params.id);
+    } catch (e) {
+        res.render('/auth/error', { error: 'User not found' });
+    }
+    let userInfo = req.body;
+    const updateuser = await usersData.getUserById(req.params.id);
+    let updatedInfo = {};
+    updatedInfo.email = updateuser.email;
+    updatedInfo.password = updateuser.password;
+    updatedInfo.firstName = updateuser.firstName;
+    updatedInfo.lastName = updateuser.lastName;
+    updatedInfo.address = updateuser.address;
+    updatedInfo.usreRole = updateuser.userRole;
+ 
+    if (!userInfo) {
+        res.render('/auth/error', { error: 'You must at least update one data to a user' });
+        let user = await usersData.getUserById(req.params.id); // ID string
+        res.render('/auth/userpage', user);  //send user data to the info page
+    }
+    if (userInfo.username) {
+        if (typeof (userInfo.username) != 'string' || userInfo.username.length == 0) {
+            res.render('/auth/error', { error: 'you must update a non-empty string username' });
+        }
+        updatedInfo.username = userInfo.username;
+    }
+    if (userInfo.email) {
+        if (typeof (userInfo.email) != 'string' || userInfo.email.length == 0) {
+            res.render('/auth/error', { error: 'you must update a non-empty string email' });
+        }
+        updatedInfo.email = userInfo.email;
+    }
+    if (userInfo.password) {
+        if (typeof (userInfo.password) != 'string' || userInfo.password.length == 0) {
+            res.render('/auth/error', { error: 'you must update a non-empty string password' });
+        }
+        let newpass = await bcrypt.hash(userInfo.password, saltRounds);
+        updatedInfo.password = newpass;
+    }
+    if (userInfo.firstName) {
+        if (typeof (userInfo.firstName) != 'string' || userInfo.firstName.length == 0) {
+            res.render('/auth/login', { error: 'provide valide first name' });
+    
+        }
+        updatedInfo.firstName = userInfo.firstName;
+    }
+    if (userInfo.lastName) {
+        if (typeof (userInfo.lastName) != 'string' || userInfo.lastName.length == 0) {
+            res.render('/auth/error', { error: 'provide valide last name' });
 
+        }
+        updatedInfo.lastName = userInfo.lastName;
+    }
 
-module.exports = router;
+    if (userInfo.address) {
+        if (typeof (userInfo.address) != 'string' || userInfo.lastName.address == 0) {
+            res.render('/auth/error', { error: 'provide valide address' });
+
+        }
+        updatedInfo.address = userInfo.address;
+    }
+    try {
+        res.json(await usersData.updateUser(req.params.id,updatedInfo));
+      } catch (e) {
+        res.sendStatus(500);
+      }
+});
+
+    router.get('/logout', async (req, res) => {
+        req.session.destroy();
+        res.render('auth/logout');
+    });
+
+    module.exports = router;

@@ -5,7 +5,7 @@ const inventory = mongoCollections.inventory;
 const userMethods = require('./users');
 
 let exportedMethods = {
-    async get() {
+    async getAll() {
         const inventoryCollection = await inventory();
         const inventoryArray = await inventoryCollection.find({}).toArray();
         if (!inventoryArray) throw 'No products in system!';
