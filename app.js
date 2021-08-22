@@ -1,39 +1,65 @@
-const express = require('express');
-const connection = require('./config/mongoConnection');
-
+const express = require("express");
 const app = express();
+const configRoutes = require('./routes');
+const cookieParser = require('cookie-parser');
 
+const session = require("express-session");
+
+// to  use  static css or js 
+const static = express.static(__dirname + "/public");
+app.use("/public", static);
+
+app.use(cookieParser());
+app.use(session({
+  name: 'AuthCookie',
+  secret: 'some secret string!',
+  resave: false,
+  saveUninitialized: true,
+}));
+
+app.use( async(req, res, next) =>{
+  let currentTimestamp = new Date().toUTCString();
+  let requestMethod = req.method;
+  let requestRoutes = req.originalUrl;
+  let Authenticated;
+  
+  if(req.session){
+    Authenticated="Authenticated User"
+  } else {
+    Authenticated="Non-Authenticated User"
+  }
+  console.log(`[${currentTimestamp}]: ${requestMethod} ${requestRoutes} (${Authenticated})`)
+  next();
+});
+
+app.use("/auth/login", (req, res, next) => {
+  if (!req.session.user && req.method === "GET") {
+    return res.status(200).render("auth/login");
+  } else {
+    next();
+  }
+});
+
+app.use("/auth/register", (req, res, next) => {
+  if (!req.session.user && req.method === "GET") {
+    return res.status(200).render("auth/signup");
+  } else {
+    next();
+  }
+});
+
+const exphbs = require("express-handlebars");
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.engine("handlebars", exphbs({ defaultLayout: "main"}));
+app.set("view engine", "handlebars");
+app.use(express.json());
+
+configRoutes(app);
 
 app.listen(3000, () => {
-    async () => {
-        const db = await connection();
-        await db.serverConfig.close();
-    }
-
-
-    console.log("The server is up and running !!!");
-    console.log("The routes are running on http://localhost:3000");
-})
-
-const express = require('express');
-const mongoose = require('mongoose');
-const router = express.Router();
-const app = express();
-const expressEjsLayout = require('express-ejs-layouts')
-const flash = require('connect-flash');
-const session = require('express-session');
-//mongoose
-mongoose.connect('mongodb://localhost/test',{useNewUrlParser: true, useUnifiedTopology : true})
-.then(() => console.log('connected,,'))
-.catch((err)=> console.log(err));
-
-//EJS
-app.set('view engine','ejs');
-app.use(expressEjsLayout);
-//BodyParser
-app.use(express.urlencoded({extended : false}));
-//Routes
-app.use('/',require('./routes/index'));
-app.use('/users',require('./routes/users'));
-
-app.listen(3000); 
+  console.log("We've now got a server!");
+  console.log("Your routes will be running on http://localhost:3000");
+});
