@@ -32,7 +32,8 @@ router.post("/", async (req, res) => {
       res.cookie("name", "auth_cookie");
       res.redirect("/private");
     } else {
-      res.redirect("/login");
+      res.redirect("auth/login");
+     
     }
   } catch (e) {
     console.log(e);
