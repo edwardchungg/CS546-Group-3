@@ -148,14 +148,15 @@ router.patch('/:id', async (req, res) => {
     try { // see if you can find the order and then set values to what's changed
         const theorder = await orderData.read(req.params.id);
 
-        if (requestBody.productName && requestBody.productName !== theorder.title) updateorder.productName = requestBody.productName;
-		if (requestBody.woodType && requestBody.woodType !== theorder.woodType) updateorder.woodType = requestBody.woodType;
-		if (requestBody.color && requestBody.color !== theorder.color) updateorder.color = requestBody.color;
-		if (requestBody.manufacturer && requestBody.manufacturer !== theorder.manufacturer) updateorder.manufacturer = requestBody.manufacturer;
-		if (requestBody.stock && requestBody.stock !== theorder.stock) updateorder.stock = requestBody.stock;
-		if (requestBody.unitCost && requestBody.unitCost !== theorder.unitCost) updateorder.unitCost = requestBody.unitCost;
-		if (requestBody.createdBy && requestBody.createdBy !== theorder.createdBy) updateorder.createdBy = requestBody.createdBy;
-		
+        if (requestBody.product_id && requestBody.product_id !== theorder.product_id) updateorder.product_id = requestBody.product_id;
+		if (requestBody.seller_id && requestBody.seller_id !== theorder.seller_id) updateorder.seller_id = requestBody.seller_id;
+		if (requestBody.totalQty && requestBody.totalQty !== theorder.totalQty) updateorder.totalQty = requestBody.totalQty;
+		if (requestBody.order_cost && requestBody.order_cost !== theorder.order_cost) updateorder.order_cost = requestBody.order_cost;
+		if (requestBody.address && requestBody.address !== theorder.address) updateorder.address = requestBody.address;
+		if (requestBody.delivery_date && requestBody.delivery_date !== theorder.delivery_date) updateorder.delivery_date = requestBody.delivery_date;
+		if (requestBody.shipping_cost && requestBody.shipping_cost !== theorder.shipping_cost) updateorder.shipping_cost = requestBody.shipping_cost;
+        if (requestBody.total_of_Order && requestBody.total_of_Order !== theorder.total_of_Order) updateorder.total_of_Order = requestBody.total_of_Order;
+        if (requestBody.order_status && requestBody.order_status !== theorder.order_status) updateorder.order_status = requestBody.order_status;
 
     } catch (e) {
         res.status(404).json({error: `order not found with order_id: ${req.params.id}.`});
