@@ -29,32 +29,35 @@ router.post('/craeteOrder', async (req, res) => {
         res.status(400).json({error: "Product id is must to create a order for the prduct"});
     }   
     if (!orderInfo.seller_id) {
-        res.status(400).json({error: "seller id is must to create a product"});
+        res.status(400).json({error: "seller id is must to create a order"});
     }
     if (!orderInfo.totalQty) {
-        res.status(400).json({error: "totalQty is must to create a product"});
+        res.status(400).json({error: "totalQty is must to create a order"});
     }
     if (!orderInfo.order_cost) {
-        res.status(400).json({error: "order_cost is must to create a product"});
+        res.status(400).json({error: "order_cost is must to create a order"});
     }
     if (!orderInfo.address) {
-        res.status(400).json({error: "address is must to create a product"});
+        res.status(400).json({error: "address is must to create a order"});
     }
 	if (!orderInfo.delivery_date) {
-        res.status(400).json({error: "delivery_date is must to create a product"});
+        res.status(400).json({error: "delivery_date is must to create a order"});
     }
     if (!orderInfo.shipping_cost) {
-        res.status(400).json({error: "shipping_cost is must to create a product"});
+        res.status(400).json({error: "shipping_cost is must to create a order"});
     }
     if (!orderInfo.total_of_Order) {
-        res.status(400).json({error: "total_of_Order is must to create a product"});
+        res.status(400).json({error: "total_of_Order is must to create a order"});
     }
     if (!orderInfo.order_status) {
-        res.status(400).json({error: "order_status is must to create a product"});
+        res.status(400).json({error: "order_status is must to create a order"});
+    }
+    if (!orderInfo.selling_price) {
+        res.status(400).json({error: "selling_price is must to create a order"});
     }
 
     try {
-        const createOrder = await orderData.create(orderInfo.product_id, orderInfo.seller_id, orderInfo.totalQty, orderInfo.order_cost, orderInfo.address, orderInfo.delivery_date, orderInfo.shipping_cost, orderInfo.total_of_Order, orderInfo.order_status);
+        const createOrder = await orderData.create(orderInfo.product_id, orderInfo.seller_id, orderInfo.totalQty, orderInfo.order_cost, orderInfo.address, orderInfo.delivery_date, orderInfo.shipping_cost, orderInfo.total_of_Order, orderInfo.order_status, orderInfo.selling_price);
         //res.status(200).json(createOrder);
         res.render('sellers/viewOrders', createOrder);
 
@@ -98,28 +101,31 @@ router.put('/:id', async (req, res) => {
         res.status(400).json({error: "Product id is must to create a order for the prduct"});
     }   
     if (!orderInfo.seller_id) {
-        res.status(400).json({error: "seller id is must to create a product"});
+        res.status(400).json({error: "seller id is must to create a order"});
     }
     if (!orderInfo.totalQty) {
-        res.status(400).json({error: "totalQty is must to create a product"});
+        res.status(400).json({error: "totalQty is must to create a order"});
     }
     if (!orderInfo.order_cost) {
-        res.status(400).json({error: "order_cost is must to create a product"});
+        res.status(400).json({error: "order_cost is must to create a order"});
     }
     if (!orderInfo.address) {
-        res.status(400).json({error: "address is must to create a product"});
+        res.status(400).json({error: "address is must to create a order"});
     }
 	if (!orderInfo.delivery_date) {
-        res.status(400).json({error: "delivery_date is must to create a product"});
+        res.status(400).json({error: "delivery_date is must to create a order"});
     }
     if (!orderInfo.shipping_cost) {
-        res.status(400).json({error: "shipping_cost is must to create a product"});
+        res.status(400).json({error: "shipping_cost is must to create a order"});
     }
     if (!orderInfo.total_of_Order) {
-        res.status(400).json({error: "total_of_Order is must to create a product"});
+        res.status(400).json({error: "total_of_Order is must to create a order"});
     }
     if (!orderInfo.order_status) {
-        res.status(400).json({error: "order_status is must to create a product"});
+        res.status(400).json({error: "order_status is must to create a order"});
+    }
+    if (!orderInfo.selling_price) {
+        res.status(400).json({error: "selling_price is must to create a order"});
     }
 
     try {
@@ -160,8 +166,9 @@ router.patch('/:id', async (req, res) => {
 		if (requestBody.address && requestBody.address !== theorder.address) updateorder.address = requestBody.address;
 		if (requestBody.delivery_date && requestBody.delivery_date !== theorder.delivery_date) updateorder.delivery_date = requestBody.delivery_date;
 		if (requestBody.shipping_cost && requestBody.shipping_cost !== theorder.shipping_cost) updateorder.shipping_cost = requestBody.shipping_cost;
-        if (requestBody.total_of_Order && requestBody.total_of_Order !== theorder.total_of_Order) updateorder.total_of_Order = requestBody.total_of_Order;
-        if (requestBody.order_status && requestBody.order_status !== theorder.order_status) updateorder.order_status = requestBody.order_status;
+        	if (requestBody.total_of_Order && requestBody.total_of_Order !== theorder.total_of_Order) updateorder.total_of_Order = requestBody.total_of_Order;
+       		if (requestBody.order_status && requestBody.order_status !== theorder.order_status) updateorder.order_status = requestBody.order_status;
+	    	if (requestBody.selling_price && requestBody.selling_price !== theorder.selling_price) updateorder.selling_price = requestBody.selling_price;
 
     } catch (e) {
         res.status(404).json({error: `order not found with order_id: ${req.params.id}.`});
