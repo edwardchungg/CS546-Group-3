@@ -1,0 +1,32 @@
+<main>
+    <div id="viewProductListContent">
+		<header id="viewProductList">
+		    <h3 id="viewProductListTitle">View All Productions</h3>
+		</header>   
+
+        <div id="prodcutListContent">
+            {{#each inventory}}
+                <ul>
+                    <a href="/inventory/{{_id}}"><li>{{productName}}</li></a>
+                </ul>
+            {{/each}}
+
+
+            <table id="tableSection">
+                <tr>
+                    <td>
+                        <label for="name">Production's Name:</label>
+                    </td>
+                    <td>
+                        <p id="name" name="name">{{inventory.productName}}</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+
+
+		 
+    </div>
+</main>

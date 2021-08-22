@@ -1,0 +1,72 @@
+<main>
+    <div id="createProductionContent">
+		<header id="createProductionHeader">
+		    <h3 id="createProductionTitle">Create a new production</h3>
+		</header>   
+
+		<!-- New production's information fill up-->   
+		<form id="createProductionForm" action="/create_production" method="post" enctype="multipart/form-data">
+			<p>I. Fill in customer's information</p>
+			<div class="formSection">
+				<h4 class="formSectionTitle">Production's name</h4>
+					<input id="name" class="formTextInput" type="text" name="name" placeholder="Production's name" maxlength="30" required>
+			</div>
+
+            <div class="formSection">
+                <h4 class="formSectionTitle">Wood Type</h4>
+                    <form>
+                        <input id="oak" class="formTextInput" type="radio" name="woodType" value="Oak" checked="checked">
+                        <label for="oak">Oak</label><br>
+                        <input id="maple" class="formTextInput" type="radio" name="woodType" value="Maple">
+                        <label for="maple">Maple</label><br>
+                        <input id="hickory" class="formTextInput" type="radio" name="woodType" value="Hickory">
+                        <label for="hickory">Hickory</label>
+                    </form>
+            </div>
+			
+            <div class="formSection">
+                <h4 class="formSectionTitle">Color</h4>
+                    <form>
+                        <input id="yellow" class="formTextInput" type="radio" name="color" value="Yellow" checked="checked">
+                        <label for="yellow">Yellow</label><br>
+                        <input id="red" class="formTextInput" type="radio" name="color" value="Red">
+                        <label for="red">Red</label><br>
+                        <input id="black" class="formTextInput" type="radio" name="color" value="Black">
+                        <label for="black">Black</label>
+                    </form>
+            </div>	
+			
+            <div class="formSection">
+                <h4 class="formSectionTitle">Manufacture</h4>
+                    <form>
+                        <input id="m1" class="formTextInput" type="radio" name="manufacture" value="M1" checked="checked">
+                        <label for="m1">M1</label><br>
+                        <input id="m2" class="formTextInput" type="radio" name="manufacture" value="M2">
+                        <label for="m2">M2</label><br>
+                        <input id="m3" class="formTextInput" type="radio" name="manufacture" value="M3">
+                        <label for="m3">M3</label>
+                    </form>
+            </div>
+			
+            <div class="formSection">
+				<h4 class="formSectionTitle">Buying price (per sqt): $</h4>
+					<input id="buyingPrice" class="formTextInput" type="number" name="buyingPrice" placeholder="0" maxlength="30" required>
+			</div>	
+
+            <div class="formSection">
+				<h4 class="formSectionTitle">Stock (in sqt)</h4>
+					<input id="stock" class="formTextInput" type="number" name="stock" placeholder="0" maxlength="30" required>
+			</div>	
+			
+
+            <!-- show totle price, wait to add-->
+
+			<p class="error"></p>
+			<input id="submitButton" type="submit" value="Create an new production">																													
+		</form>  
+
+        <div id="logoutContent">
+			<a id="logoutLink" href="auth/logout">Log out</a>
+		</div>   
+    </div>
+</main>
