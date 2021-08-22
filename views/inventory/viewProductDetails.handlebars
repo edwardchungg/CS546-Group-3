@@ -60,7 +60,7 @@
         <div id="actionContent">
             <form id="productDelete" action="/inventory/delete" method="post" style="display: inline-block;">
                 <input type="text" name="productID" value="{{inventory._id}}" hidden/>
-                <button id="submitButton" type="submit">Delete this production</button>
+                <button id="submitButton" class="submitButton" type="submit">Delete this production</button>
             </form>
             <form id="productModify" action="/inventory/modify" method="post" style="display: inline-block;">
                 <input type="text" name="productID" value="{{inventory._id}}" hidden/>
@@ -70,7 +70,7 @@
                 <input type="text" name="productManufacture" value="{{inventory.manufacture}}" hidden/>
                 <input type="number" name="productBuyingPrice" value="{{inventory.buyingPrice}}" hidden/>
                 <input type="number" name="productStock" value="{{inventory.stock}}" hidden/>                
-                <button class="submitButton" type="submit">Modify this production</button>
+                <button id="submitButton" class="submitButton" type="submit">Modify this production</button>
             </form>
         </div>     
     </div>

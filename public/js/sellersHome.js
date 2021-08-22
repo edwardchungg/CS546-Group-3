@@ -3,15 +3,15 @@ function createNewOrder(){
 };
 
 
-function viewHistoryOrders(){
-    //redicrect from sellersHome page to viewOrders page
+function viewAllOrders(){
+    //redicrect from sellersHome page to viewOrdersList page
 
 
 };
 
 
-function viewProductions(){
-    //redicrect from sellersHome page to viewProductions page
+function viewAllProductions(){
+    //redicrect from sellersHome page to viewProductList page
 
 
 };

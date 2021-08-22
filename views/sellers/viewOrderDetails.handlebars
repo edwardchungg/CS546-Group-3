@@ -1,0 +1,155 @@
+<main>
+    <div id="viewOrderDetailsContent">
+		<header id="viewOrderDetails">
+		    <h3 id="viewOrderDetailsTitle">View the Order's information</h3>
+		</header>   
+
+        <div id="orderDetailsContent">
+            <table id="tableSection">
+                <tr>
+                    <td>
+                        <label for="orderID">Order's ID:</label>
+                    </td>
+                    <td>
+                        <p id="orderID" name="orderID">{{order._id}}</p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="sellerName">Seller's name:</label>
+                    </td>
+                    <td>
+                        <p id="sellerName" name="sellerName">{{user.firstName}} {{user.lastName}}</p>
+                    </td>
+                </tr> 
+
+                <tr>
+                    <td>
+                        <label for="productName">Production's name:</label>
+                    </td>
+                    <td>
+                        <p id="productName" name="productName">{{inventory.productName}}</p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="woodType">Wood Type:</label>
+                    </td>
+                    <td>
+                        <p id="woodType" name="woodType">{{inventory.woodType}}</p>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <label for="color">Color:</label>
+                    </td>
+                    <td>
+                        <p id="color" name="color">{{inventory.color}}</p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="manufacture">Manufacture:</label>
+                    </td>
+                    <td>
+                        <p id="manufacture" name="manufacture">{{inventory.manufacture}}</p>
+                    </td>
+                </tr>  
+
+                <tr>
+                    <td>
+                        <label for="totalQty">Total Quantity:</label>
+                    </td>
+                    <td>
+                        <p id="totalQty" name="totalQty">{{order.totalQty}}</p>
+                    </td>
+                </tr>  
+
+                <tr>
+                    <td>
+                        <label for="sellingPrice">Selling price (per sqt):</label>
+                    </td>
+                    <td>
+                        <p id="sellingPrice" name="sellingPrice">$ {{order.sellingPrice}}</p>
+                    </td>
+                </tr> 
+
+                <tr>
+                    <td>
+                        <label for="shippingCost">Shipping cost:</label>
+                    </td>
+                    <td>
+                        <p id="shippingCost" name="shippingCost">$ {{order.shipping_cost}}</p>
+                    </td>
+                </tr>   
+
+                <tr>
+                    <td>
+                        <label for="totalOfOrder">Total of order:</label>
+                    </td>
+                    <td>
+                        <p id="totalOfOrder" name="totalOfOrder">$ {{order.total_of_order}}</p>
+                    </td>
+                </tr>                                                                                                          
+
+                <tr>
+                    <td>
+                        <label for="shippingAdress">Shipping adress:</label>
+                    </td>
+                    <td>
+                        <p id="shippingAdress" name="shippingAdress">{{order.adress}}</p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="deliveryDate">Delivery date:</label>
+                    </td>
+                    <td>
+                        <p id="deliveryDate" name="deliveryDate">{{order.delivery_date}}</p>
+                    </td>
+                </tr> 
+
+                <tr>                 
+                    <td>
+                        <label for="orderStatus">Order status:</label>
+                    </td>
+                    <td>
+                        {{if order.order_status}}
+                        <!-- order delivered, the status is true-->
+                            <p id="orderStatus" name="orderStatus">Order delivered!</p>
+                        {{else}}
+                        <!-- order not delivered, the status is false-->
+                            <p id="orderStatus" name="orderStatus">Order not delivered yet!</p>
+                    </td>
+                </tr>                                   
+            </table>
+        </div>
+
+        <div id="actionContent">
+            <form id="productDelete" action="/order/delete" method="post" style="display: inline-block;">
+                <input type="text" name="orderID" value="{{order._id}}" hidden/>
+                <button id="submitButton" class="submitButton" type="submit">Delete this order</button>
+            </form>
+            <form id="orderModify" action="/order/modify" method="post" style="display: inline-block;">
+                <input type="text" name="orderID" value="{{order._id}}" hidden/>
+                <input type="text" name="productID" value="{{inventory._id}}" hidden/>
+                <input type="text" name="sellerID" value="{{user._id}}" hidden/>
+                <input type="number" name="totalQty" value="{{order.totalQty}}" hidden/>                
+                <input type="number" name="sellingPrice" value="{{order.sellingPrice}}" hidden/>
+                <input type="number" name="shippingCost" value="{{order.shipping_cost}}" hidden/>
+                <input type="text" name="shippingAddress" value="{{order.address}}" hidden/>
+                <input type="date" name="deliveryDate" value="{{order.dlivery_date}}" hidden/>
+                <input type="checkbox" name="order_status" value="Order delivered" checked hidden/>    
+                <input type="checkbox" name="order_status" value="Order not delivered" hidden/>                
+                <button id="submitButton" class="submitButton" type="submit">Modify this order</button>
+            </form>
+        </div>          
+
+   
+    </div>
+</main>

@@ -4,10 +4,10 @@
 		    <h3 id="viewOrdersListTitle">View All Orders</h3>
 		</header>   
 
-        <div id="prodcutionsListContent">
-            {{#each inventory}}
+        <div id="ordersListContent">
+            {{#each order}}
                 <ul>
-                    <a href="/inventory/{{_id}}"><li>{{productName}}</li></a>
+                    <a href="/order/{{_id}}"><li>{{inventory.Product_id}}</li></a>
                 </ul>
             {{/each}}
 
@@ -15,10 +15,10 @@
             <table id="tableSection">
                 <tr>
                     <td>
-                        <label for="name">Production's Name:</label>
+                        <label for="orderID">Order's ID:</label>
                     </td>
                     <td>
-                        <p id="name" name="name">{{inventory.productName}}</p>
+                        <p id="orderID" name="orderID">{{order._id}}</p>
                     </td>
                 </tr>
             </table>

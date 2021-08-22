@@ -1,17 +1,17 @@
 <main>
     <div id="modifyProductContent">
-		<header id="modifyProductDetails">
-		    <h3 id="mpdifyProductTitle">Modify the production's information</h3>
+		<header id="modifyProductHeader">
+		    <h3 id="modifyProductTitle">Modify the production's information</h3>
 		</header>  
 
-        <form id="modifyProductForm" action="/inventory/modify/{{id}}" method="post">
-            <table id="tableSection">
+        <form id="modifyProductForm" action="/inventory/modify/{{inventory._id}}" method="post">
+            <table id="tableSection">                
                 <tr>
                     <td>
                         <label for="name">Name:</label>
                     </td>
                     <td>
-                        <input type="text" name="name" id="name" value="{{name}}">
+                        <input type="text" name="name" id="name" value="{{inventory.name}}">
                     </td>
                 </tr>
                 <tr>
@@ -52,10 +52,10 @@
                 </tr>
                 <tr>
                     <td>
-                        <label for="buyingPrice">Buying price (per sqt): $</label>
+                        <label for="unitCost">Unit cost (per sqt): $</label>
                     </td>
                     <td>
-                        <input type="number" name="buyingPrice" id="buyingPrice" value="{{buyingPrice}}">
+                        <input type="number" name="unitCost" id="unitCost" value="{{inventory.unitCost}}">
                     </td>
                 </tr>
                 <tr>
@@ -63,7 +63,7 @@
                         <label for="stock">Stock (in sqt):</label>
                     </td>
                     <td>
-                        <input type="number" name="stock" id="stock" value="{{stock}}">
+                        <input type="number" name="stock" id="stock" value="{{inventory.stock}}">
                     </td>
                 </tr>  
                 <tr>
