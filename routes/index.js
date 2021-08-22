@@ -24,6 +24,7 @@ const constructorMethod = (app) => {
       return;
     }
     res.json({ result: false });
+    //res.json({};)
     return;
   });
 };
