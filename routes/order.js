@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 
  //   To add order 
 
-router.post('/', async (req, res) => {
+router.post('/craeteOrder', async (req, res) => {
     let orderInfo = req.body;
 
     if (!orderInfo) {
@@ -55,7 +55,9 @@ router.post('/', async (req, res) => {
 
     try {
         const createOrder = await orderData.create(orderInfo.product_id, orderInfo.seller_id, orderInfo.totalQty, orderInfo.order_cost, orderInfo.address, orderInfo.delivery_date, orderInfo.shipping_cost, orderInfo.total_of_Order, orderInfo.order_status);
-        res.status(200).json(createOrder);
+        //res.status(200).json(createOrder);
+        res.render('sellers/viewOrders', createOrder);
+
     } catch (e) {
         res.status(400).json({error: e});
     }
@@ -71,7 +73,9 @@ router.get('/:id', async (req, res) => {
 
     try {
         const order = await orderData.read(req.params.id);
-        res.status(200).json(order);
+        //res.status(200).json(order);
+        res.render('sellers/viewOrders',order);
+
     } catch (e) {
         res.status(404).json({error: `order not found with order_id: ${req.params.id}.`});
     }
@@ -126,8 +130,9 @@ router.put('/:id', async (req, res) => {
     }
 
     try {
-        const order = await orderData.update(req.params.id, orderInfo);
-        res.status(200).json(order);
+        const updateorder = await orderData.update(req.params.id, orderInfo);
+        //res.status(200).json(order);
+        res.render('sellers/viewOrders', updateorder);
     } catch (e) {
         res.status(400).json({error: e});
     }
@@ -165,7 +170,8 @@ router.patch('/:id', async (req, res) => {
     if (Object.keys(updateorder).length !== 0) {
         try {
             const updateorder = await orderData.update(req.params.id, requestBody);
-            res.status(200).json(updateorder);
+            //res.status(200).json(updateorder);
+            res.render('sellers/viewOrders', updateorder);
         } catch (e) {
             res.status(400).json({error: e});
         }
@@ -186,7 +192,8 @@ router.delete('/:id', async (req, res) => {
     }
     try {
         let deleteorder = await orderData.delete(req.params.id);
-        res.status(200).json(deleteInventor);
+        //res.status(200).json(deleteorder);
+        res.render('seller/viewOrders', deleteorder);
     } catch (e) {
         res.status(500).json({error: e});
     }
