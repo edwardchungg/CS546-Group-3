@@ -63,7 +63,6 @@
                 <button id="submitButton" class="submitButton" type="submit">Delete this production</button>
             </form>
             <form id="productModify" action="/inventory/modify" method="post" style="display: inline-block;">
-                <input type="text" name="productID" value="{{inventory._id}}" hidden/>
                 <input type="text" name="productName" value="{{inventory.name}}" hidden/>
                 <input type="text" name="productWoodType" value="{{inventory.woodType}}" hidden/>
                 <input type="text" name="productColor" value="{{inventory.color}}" hidden/>
