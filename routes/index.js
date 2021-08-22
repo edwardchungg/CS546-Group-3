@@ -10,12 +10,6 @@ const constructorMethod = (app) => {
     res.render("pages/index");
   });
   app.use("/user", userRoutes);
-  // app.use("/register", registerRoute);
-  // app.use("/login", loginRoute);
-  // app.use("/logout", logoutRoute);
-  // app.use("/private", privateRoute);
-  // app.use("/userDelete", userDeleteRoute);
-  // app.use("/userUpdate", userUpdateRoute);
   app.use("/inventory", inventoryRoutes);
   // app.use("/order", orderRoutes);
   app.get("/getSession", async (req, res) => {
