@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
       if (await usersData.checkUser(User.username, User.password)) {
         req.session.user = await usersData.getByUsername(User.username);
         res.cookie("name", "auth_cookie");
-        res.redirect("/private");
+        res.redirect("/");
       } else {
         res.redirect("auth/login");
        
@@ -103,7 +103,7 @@ router.post("/register", async (req, res) => {
         );
         req.session.user = await usersData.getByEmail(newUser.email);
         res.cookie("name", "auth_cookie");
-        res.redirect("/private");
+        res.redirect("/");
       }
     } catch (e) {
       res.status(500).json({ error: e });
@@ -200,8 +200,7 @@ router.patch('/:id', async (req, res) => {
 
     router.get('/logout', async (req, res) => {
         req.session.destroy();
-        res.render('auth/logout');
-        //res.render('/welcome');
+        res.render('auth/login');
     });
 
     module.exports = router;

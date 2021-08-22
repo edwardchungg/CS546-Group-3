@@ -27,13 +27,13 @@ let exportedMethods = {
         if (!foundProduct ) throw 'Product not found';
         return foundProduct;    
     },
-    async create(productName, woodType, color, manufacturer, productImage, stock, unitCost, createdBy){
+    async create(productName, woodType, color, manufacturer, stock, unitCost, createdBy){
         
         if (!productName) throw 'You must provide a name!';
         if (!woodType) throw 'You must provide a type of wood!';
         if (!color) throw 'You must provide a color!';
         if (!manufacturer) throw 'You must provide a manufacturer!';
-        if (!productImage) throw 'You must provide an image!';
+        // if (!productImage) throw 'You must provide an image!';
         if (!stock) throw 'You must provide a quantity!';
         if (!unitCost) throw 'You must provide a unit cost!';
         if (!createdBy) throw 'You must provide a user!';

@@ -16,7 +16,7 @@ const constructorMethod = (app) => {
   // app.use("/private", privateRoute);
   // app.use("/userDelete", userDeleteRoute);
   // app.use("/userUpdate", userUpdateRoute);
-  // app.use("/inventory", inventoryRoutes);
+  app.use("/inventory", inventoryRoutes);
   // app.use("/order", orderRoutes);
   app.get("/getSession", async (req, res) => {
     if (req.session.user) {
