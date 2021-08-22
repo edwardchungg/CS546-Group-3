@@ -1,0 +1,77 @@
+<main>
+    <div id="viewProductDetailsContent">
+		<header id="viewProductDetails">
+		    <h3 id="viewProductDetailsTitle">View the production's information</h3>
+		</header>   
+
+        <div id="prodcutDetailsContent">
+            <table id="tableSection">
+                <tr>
+                    <td>
+                        <label for="name">Name:</label>
+                    </td>
+                    <td>
+                        <p id="name" name="name">{{inventory.productName}}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="woodType">Wood type:</label>
+                    </td>
+                    <td>
+                        <p id="woodType" name="woodType">{{inventory.woodType}}</p>
+                    </td>
+                </tr>  
+                <tr>
+                    <td>
+                        <label for="color">Color:</label>
+                    </td>
+                    <td>
+                        <p id="color" name="color">{{inventory.color}}</p>
+                    </td>
+                </tr>    
+                <tr>
+                    <td>
+                        <label for="manufacture">Manufacture:</label>
+                    </td>
+                    <td>
+                        <p id="manufacture" name="manufacture">{{inventory.manufacture}}</p>
+                    </td>
+                </tr> 
+                <tr>
+                    <td>
+                        <label for="buyingPrice">Buying price (per sqt): $</label>
+                    </td>
+                    <td>
+                        <p id="buyingPrice" name="buyingPrice">{{inventory.buyingPrice}}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="stock">Stock (in sqt):</label>
+                    </td>
+                    <td>
+                        <p id="stock" name="stock">{{inventory.stock}}</p>
+                    </td>
+                </tr>                                                                                  
+            </table>
+        </div>
+
+        <div id="actionContent">
+            <form id="productDelete" action="/inventory/delete" method="post" style="display: inline-block;">
+                <input type="text" name="productID" value="{{inventory._id}}" hidden/>
+                <button id="submitButton" type="submit">Delete this production</button>
+            </form>
+            <form id="productModify" action="/inventory/modify" method="post" style="display: inline-block;">
+                <input type="text" name="productID" value="{{inventory._id}}" hidden/>
+                <input type="text" name="productName" value="{{inventory.name}}" hidden/>
+                <input type="text" name="productWoodType" value="{{inventory.woodType}}" hidden/>
+                <input type="text" name="productColor" value="{{inventory.color}}" hidden/>
+                <input type="text" name="productManufacture" value="{{inventory.manufacture}}" hidden/>
+                <input type="number" name="productBuyingPrice" value="{{inventory.buyingPrice}}" hidden/>
+                <input type="number" name="productStock" value="{{inventory.stock}}" hidden/>                
+                <button class="submitButton" type="submit">Modify this production</button>
+            </form>
+        </div>     
+    </div>
+</main>
