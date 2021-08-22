@@ -104,6 +104,7 @@ router.patch('/:id', async (req, res) => {
     router.get('/logout', async (req, res) => {
         req.session.destroy();
         res.render('auth/logout');
+        //res.render('/welcome');
     });
 
     module.exports = router;
