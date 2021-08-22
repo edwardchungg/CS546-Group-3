@@ -28,7 +28,7 @@ let exportedMethods = {
         if (!foundOrder ) throw 'Order not found';
         return foundOrder;    
     },
-    async create(product_id,seller_id,totalQty,order_cost,address,delivery_date,shipping_cost,total_of_Order, order_status){
+    async create(product_id,seller_id,totalQty,order_cost,address,delivery_date,shipping_cost,total_of_Order, order_status, selling_price){
         
         if (!product_id) throw 'You must provide a product id!';
         if (!seller_id) throw 'You must provide a seller id!';
@@ -39,6 +39,7 @@ let exportedMethods = {
         if (!shipping_cost) throw 'You must provide a cost of shipping!';
         if (!total_of_Order) throw 'You must provide the total cost of the order!';
         if (!order_status) throw 'You must provide the status of the order!';
+        if (!selling_price) throw 'You must provide the price of item sold!';
    
 
         if (typeof product_id != "string") throw 'You must provide a string for the product id';
@@ -50,6 +51,7 @@ let exportedMethods = {
         if (typeof total_of_Order != "number") throw 'You must provide a number for the total cost of the order';
         if (typeof order_status != "string") throw 'You must provide a string for the order status';
         if (typeof delivery_date != "string") throw 'You must provide a string for the date';
+        if (typeof selling_price != "number") throw 'You must provide a number for the price of the item';
 
         // Validate users exists
         if (!userMethods.getByUsername(createdBy)){
@@ -70,7 +72,8 @@ let exportedMethods = {
             delivery_date: delivery_date,
             shipping_cost: shipping_cost,
             total_of_Order: total_of_Order,
-            order_status: order_status
+            order_status: order_status,
+            selling_price: selling_price
         }
         const orderCollection = await orders();
         const insertInfo = await orderCollection.insertOne(newOrder);
@@ -103,7 +106,8 @@ let exportedMethods = {
             delivery_date: order.delivery_date,
             shipping_cost: order.shipping_cost,
             total_of_Order: order.total_of_Order,
-            order_status: order.order_status
+            order_status: order.order_status,
+            selling_price: order.selling_price
         }
         const orderCollection = await orders();
         const updatedInfo = await orderCollection.updateOne(
