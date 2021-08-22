@@ -72,6 +72,16 @@ router.post("/register", async (req, res) => {
   }
 })
 
+// logout
+
+router.get("/logout", async (req, res) => {
+    // trigger /logout router to logout
+    res.clearCookie("AuthCookie");
+    res.clearCookie("Build Session");
+    req.session.destroy();
+    res.status(200).redirect("/user");
+  });
+
 
 
 module.exports = router;

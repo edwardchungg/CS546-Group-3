@@ -9,13 +9,13 @@ const constructorMethod = (app) => {
   app.use("/inventory", inventoryRoutes);
   app.use("/order", orderRoutes);
   
-  app.get("/logout", async (req, res) => {
-    // trigger /logout router to logout
-    res.clearCookie("AuthCookie");
-    res.clearCookie("Build Session");
-    req.session.destroy();
-    res.status(200).redirect("/user");
-  });
+//   app.get("/logout", async (req, res) => {
+//     // trigger /logout router to logout
+//     res.clearCookie("AuthCookie");
+//     res.clearCookie("Build Session");
+//     req.session.destroy();
+//     res.status(200).redirect("/user");
+//   });
 
   app.use("/", async (req, res) => {
     res.redirect("/user");
