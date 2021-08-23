@@ -7,7 +7,7 @@ const inventoryRoutes = require("./inventory");
 
 const constructorMethod = (app) => {
   app.get("/", function (req, res) {
-    res.render("pages/index");
+    res.render("auth/login");
   });
   app.use("/user", userRoutes);
   app.use("/inventory", inventoryRoutes);
