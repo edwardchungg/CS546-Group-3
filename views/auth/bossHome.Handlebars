@@ -8,9 +8,15 @@
         <ul>
             <button class="submiteButton" type="button" onclick="gotoSellers()">Sellers Page</button><br>
             <button class="submiteButton" type="button" onclick="gotoInventory()">Inventory Page</button><br>
-            <button class="submiteButton" type="button" onclick="gotoDelivery()">Delivery Page</button><br>
-            <button class="submiteButton" type="button" onclick="gotoFinancial()">Financial Page</button>
         </ul>
+
+        <div id="profitContent">
+            <h4>Click the button below to show or hide the profit of the company:</h4>
+            <button onclick="showOrHideProfit()" type="button">The profit</button>
+            <div id="profitShowOrHide" style="display">
+                {{profit}}
+            </div>
+        </div>
 
 		<div id="logoutContent">
 			<a id="logoutLink" href="auth/logout">Log out</a>
