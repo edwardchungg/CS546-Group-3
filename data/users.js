@@ -136,7 +136,21 @@ let exportedMethods = {
             deleted: true
         }
         return result;
-    }
+    },
+    async checkUser(username, password){
+        if (!username) throw 'Username must be provided!';
+        if (!password) throw 'password must be provided!';
+
+        const users = await this.get();
+        for (let i = 0; i < users.length; i++) {
+            let user = users[i];
+            if (user.username === username && bcrypt.compareSync(password, user.hashedPassword)) {
+                return user
+            }
+        }
+    
+        return false
+	}
 
 }
 
