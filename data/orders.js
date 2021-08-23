@@ -8,7 +8,7 @@ const inventoryMethods = require('./inventory');
 let exportedMethods = {
     async get() {
         const orderCollection = await orders();
-        const orderArray = await ordedrCollection.find({}).toArray();
+        const orderArray = await orderCollection.find({}).toArray();
         if (!orderArray) throw 'No orders in system!';
         return orderArray;
     },
