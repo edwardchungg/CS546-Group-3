@@ -1,6 +1,6 @@
 
 // const privateRoute = require("./private");
-const userDeleteRoute = require("./userDeleteRoute");
+//const userDeleteRoute = require("./userDeleteRoute");
 const userRoutes = require("./user");
 const inventoryRoutes = require("./inventory");
 // const orderRoutes = require("./orderRoutes");
