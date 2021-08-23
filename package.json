@@ -1,31 +1,29 @@
 {
-  "name": "cs546-group-3",
+  "name": "cs546-finalproject-group03",
   "version": "1.0.0",
-  "description": "- Dixaben Patel\r - Edward Chung\r - Yang Dai",
-  "main": "index.js",
-  "dependencies": {
-    "bcrypt": "^5.0.1",
-    "cookie-parser": "^1.4.5",
-    "express": "^4.17.1",
-    "express-handlebars": "^5.3.3",
-    "express-session": "^1.17.2",
-    "handlebars": "^4.7.7",
-    "mongodb": "^4.1.0",
-    "xss": "^1.0.9"
-  },
-  "devDependencies": {},
+  "description": "finalproject for group03",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/edwardchungg/CS546-Group-3.git"
+    "url": "git+https://github.com/hahahakkkE7/CS546-FinalProject-Group10.git"
   },
-  "author": "Edward Chung",
+  "author": "Dixa Patel",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/edwardchungg/CS546-Group-3/issues"
+    "url": "https://github.com/hahahakkkE7/CS546-FinalProject-Group10/issues"
   },
-  "homepage": "https://github.com/edwardchungg/CS546-Group-3#readme"
+  "homepage": "https://github.com/hahahakkkE7/CS546-FinalProject-Group10#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.0",
+    "express-session": "^1.17.1",
+    "handlebars": "^4.7.6",
+    "mongoose": "^5.11.7",
+    "xss": "^1.0.8"
+  }
 }

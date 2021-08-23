@@ -1,0 +1,32 @@
+<div class="ui container">
+        <h1>List Of All Orders</h1>
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>OrderId</th>
+                    <th>Product ID</th>
+                    <th>Owner/seller</th>
+                    <th>Qty</th>
+                    <th>Order Total</th>
+                    <th>Delievry Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each inventory}}
+                <tr>
+                    <td><a href='/allOrder/{{this._id}}'>{{this._id}}</a></td>
+                    <td>{{this.productId}}</td>
+                    <td>{{this.orderOwner}}</td>
+                    <td>{{this.totalQty}}</td>
+                    <td>{{this.order_cost}}</td>
+                    <td>{{this.deliveryDate}}</td>
+                    <td>
+                        <a href="/inventoryUpdate/{{this._id}}" class="ui mini basic teal button">Update</a>
+                        <a href="/inventory/deleteInventory/{{this._id}}" class="ui mini basic red button">Delete</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+            
+        </table>
+    </div>

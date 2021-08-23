@@ -1,10 +1,9 @@
-const userData = require("./users");
-const inventoryData = require("./inventory");
-const orderData = require("./orders");
-
+const users = require('./user');
+const inventory = require('./inventory');
+const order = require('./order');
 
 module.exports = {
-  "users": userData,
-  "inventoryData": inventoryData,
-  "orderData": orderData
+    users: users,
+    inventory: inventory,
+    order: order
 };
