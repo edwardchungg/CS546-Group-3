@@ -27,7 +27,7 @@ let exportedMethods = {
         if (!foundProduct ) throw 'Product not found';
         return foundProduct;    
     },
-    async create(productName, woodType, color, manufacturer, productImage, stock, unitCost, createdBy){
+    async create(productName, woodType, color, manufacturer, productImage, stock, unitCost, pricePerSquareFoot, createdBy){
         
         if (!productName) throw 'You must provide a name!';
         if (!woodType) throw 'You must provide a type of wood!';
@@ -40,10 +40,10 @@ let exportedMethods = {
    
 
         if (typeof productName != "string") throw 'You must provide a string for the first name';
-        if (typeof woodType != "string") throw 'You must provide a string for the last name';
+        if (typeof woodType != "string") throw 'You must provide a string for the wood type';
         if (typeof color != "string") throw 'You must provide a string for the email';
         if (typeof manufacturer != "string") throw 'You must provide a string for the manufacturer';
-        if (typeof stock != "number") throw 'You must provide a string for the last name';
+        if (typeof stock != "number") throw 'You must provide a string for the stock';
         if (typeof unitCost != "number") throw 'You must provide a string for the password';
         if (typeof createdBy != "string") throw 'You must provide a string for the username';
 
@@ -60,6 +60,8 @@ let exportedMethods = {
             manufacturer: manufacturer,
             stock: stock,
             unitCost: unitCost,
+            pricePerSquareFoot: pricePerSquareFoot,
+            purchaseOrders : [],
             createdBy: createdBy
         }
         const inventoryCollection = await inventory();
@@ -91,7 +93,8 @@ let exportedMethods = {
             manufacturer: product.manufacturer,
             stock: product.stock,
             unitCost: product.unitCost,
-            createdBy: product.createdBy
+            createdBy: product.createdBy,
+            purchaseOrders: product.purchaseOrders
         }
         const inventoryCollection = await inventory();
         const updatedInfo = await inventoryCollection.updateOne(

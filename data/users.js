@@ -72,9 +72,10 @@ let exportedMethods = {
             username: username,
             userRole: userRole,
             address: address,
-            hashedPassword: hashedPassword
+            hashedPassword: password
         }
         const userCollection = await users();
+        
         const insertInfo = await userCollection.insertOne(newUser);
         if (insertInfo.insertedCount === 0) throw 'Could not add user';
     

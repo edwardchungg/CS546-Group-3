@@ -4,6 +4,7 @@ const {ObjectId} = require('mongodb');
 const orders = mongoCollections.orders;
 const userMethods = require('./users');
 const inventoryMethods = require('./inventory');
+const { inventory } = require('../config/mongoCollections');
 
 let exportedMethods = {
     async get() {
@@ -38,7 +39,6 @@ let exportedMethods = {
         if (!delivery_date) throw 'You must provide a date of delivery!';
         if (!shipping_cost) throw 'You must provide a cost of shipping!';
         if (!total_of_Order) throw 'You must provide the total cost of the order!';
-        if (!order_status) throw 'You must provide the status of the order!';
         if (!selling_price) throw 'You must provide the price of item sold!';
    
 
@@ -49,17 +49,17 @@ let exportedMethods = {
         if (typeof address != "string") throw 'You must provide a string for the address';
         if (typeof shipping_cost != "number") throw 'You must provide a number for the shipping cost';
         if (typeof total_of_Order != "number") throw 'You must provide a number for the total cost of the order';
-        if (typeof order_status != "string") throw 'You must provide a string for the order status';
+        if (typeof order_status != "boolean") throw 'You must provide a string for the order status';
         if (typeof delivery_date != "string") throw 'You must provide a string for the date';
         if (typeof selling_price != "number") throw 'You must provide a number for the price of the item';
 
         // Validate users exists
-        if (!userMethods.getByUsername(createdBy)){
+        if (!userMethods.getById(seller_id)){
             throw 'User does not exist!'
         };
 
         // Validate product exists
-        if (!inventoryMethods.getById(seller_id)){
+        if (!inventoryMethods.getById(product_id)){
             throw 'Product does not exist!'
         };
 
@@ -81,7 +81,24 @@ let exportedMethods = {
     
         const newId = insertInfo.insertedId;
         const order = await this.getById(newId.toString());
-        return order;    
+
+        /* Add order to inventory.orders field array */
+
+        // Find Product
+        const oldProduct = await inventoryMethods.getById(product_id);
+        // Get the old orders of the product.
+        const oldOrders = oldProduct.purchaseOrders;
+        // Append this new order.
+        oldOrders.push(newId);
+        // Create a new product object.
+        const newProduct = oldProduct;
+        // Append this order_id to the new product.
+        newProduct.purchaseOrders = oldOrders;
+
+
+        const updatedProduct = await inventoryMethods.update(product_id, newProduct);
+        
+        return (order,updatedProduct);    
     },
     async update(id,order){
         if (!id) throw 'An id is required';
