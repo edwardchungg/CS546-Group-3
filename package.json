@@ -11,8 +11,7 @@
     "express-session": "^1.17.2",
     "handlebars": "^4.7.7",
     "mongodb": "^4.1.0",
-    "xss": "^1.0.9",
-    "cookie-parser": "^1.4.5",
+    "xss": "^1.0.9"
   },
   "devDependencies": {},
   "scripts": {
