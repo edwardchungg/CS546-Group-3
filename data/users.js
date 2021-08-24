@@ -116,7 +116,7 @@ let exportedMethods = {
       lastName: oldUser.lastName,
       userRole: oldUser.userRole,
       address: oldUser.address,
-      orderId: oldUsery.orderId
+      orderId: oldUser.orderId
     };
     if (updatedUser.email != "" && typeof updatedUser.email == "string") {
       updateUser.email = updatedUser.email.toLowerCase();

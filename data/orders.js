@@ -2,6 +2,7 @@ const mongoCollections = require("../config/mongoCollection");
 const inventory = mongoCollections.inventory;
 const order = mongoCollections.order;
 const user = mongoCollections.user;
+const inventoryMethods = require('../data/inventory');
 
 
 var BSON = require("mongodb");
@@ -30,30 +31,32 @@ let exportedMethods = {
         return order;
     },
 
-    async addOrder(sellerId, product_id, totalQty, order_cost, address, deliveryDate, orderOwner, productId) {
+    async addOrder(sellerId, product_id, totalQty, unit_price,shipping_cost, address, deliveryDate, orderOwner, productId) {
         if (!ObjectId.isValid(sellerId)) throw "invalid sellerId";
         if (!ObjectId.isValid(product_id)) throw "invalid product_id";
-        if (typeof totalQty != "string") throw "invalid totalQty";
-        if (typeof order_cost != "string") throw "invalid order_cost";
         if (typeof address != "string") throw "invalid address";
         if (typeof deliveryDate != "string") throw "invalid deliveryDate";
-        if (typeof orderOwner != "string") throw "invalid orderOwner";
-        if (typeof productId != "string") throw "invalid productId";
-
-
+        
+        const product = await inventoryMethods.getInventoryById(product_id);
+        if (product.stock < totalQty) throw 'Not enough stock!';
+        if (product.stock < totalQty){console.log('Not enough stock!');}
+        product.stock = product.stock - totalQty;
+        const updatedProductQty = await inventoryMethods.updateInventory(product_id,product);
         const orderCollection = await order();
 
         let newOrder = {
             sellerId: sellerId,
             product_id: product_id,
             totalQty: totalQty,
-            order_cost: order_cost,
+            unit_price: unit_price,
+            shipping_cost: shipping_cost,
+            total_cost: (parseInt(totalQty) * parseInt(unit_price)) + parseInt(shipping_cost),
             address: address,
             deliveryDate: deliveryDate,
+            deliveryStatus: false,
             orderOwner: orderOwner,
             productId: productId,
         };
-
         const newInsertInformation = await orderCollection.insertOne(newOrder);
         if (newInsertInformation.insertedCount === 0) throw "Insert failed!";
         return newInsertInformation.insertedId;
@@ -80,31 +83,31 @@ let exportedMethods = {
 
 
     async updateOrder(id, updatedOrder) {
-        if (!ObjectId.isValid(sellerId)) throw "invalid sellerId";
-        if (!ObjectId.isValid(product_id)) throw "invalid product_id";
-        if (typeof totalQty != "string") throw "invalid totalQty";
-        if (typeof order_cost != "string") throw "invalid order_cost";
-        if (typeof address != "string") throw "invalid address";
-        if (typeof deliveryDate != "string") throw "invalid deliveryDate";
-        if (typeof orderOwner != "string") throw "invalid orderOwner";
-        if (typeof productId != "string") throw "invalid productId";
+        if (!ObjectId.isValid(updatedOrder.sellerId)) throw "invalid sellerId";
+        if (!ObjectId.isValid(updatedOrder.product_id)) throw "invalid product_id";
+        if (typeof updatedOrder.address != "string") throw "invalid address";
+        if (typeof updatedOrder.deliveryDate != "string") throw "invalid deliveryDate";
+        if (typeof updatedOrder.orderOwner != "string") throw "invalid orderOwner";
+        if (typeof updatedOrder.productId != "string") throw "invalid productId";
 
-        let updateOrder = {
+        let newOrder = {
             sellerId: updatedOrder.sellerId,
             product_id: updatedOrder.product_id,
             totalQty: updatedOrder.totalQty,
-            order_cost: updatedOrder.order_cost,
+            unit_price : updatedOrder.unit_price,
+            shipping_cost : updatedOrder.shipping_cost,
+            total_cost : updatedOrder.total_cost,
             address: updatedOrder.address,
             deliveryDate: updatedOrder.deliveryDate,
             orderOwner: updatedOrder.orderOwner,
             productId: updatedOrder.productId,
+            deliveryStatus: updatedOrder.deliveryStatus
 
         };
-
         const orderCollection = await order();
         const updatedInfo = await orderCollection.updateOne(
             { _id: ObjectId(id) },
-            { $set: updateOrder }
+            { $set: newOrder }
         );
         if (!updatedInfo.matchedCount && !updatedInfo.modifiedCount)
             throw "Update failed";
