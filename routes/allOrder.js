@@ -62,4 +62,32 @@ router.get("/:p_id", async (req, res) => {
     }
 });
 
+// Order Mark Delivered
+router.get('/update/:id', async (req, res) => {
+    
+    
+    const updateObject = await orderdata.getOrderById(req.params.id);
+    let updatedInfo = {};
+    updatedInfo.deliveryStatus = true;
+    updatedInfo.sellerId = updateObject.sellerId;
+    updatedInfo.product_id = updateObject.product_id;
+    updatedInfo.totalQty = updateObject.totalQty;
+    updatedInfo.unit_price = updateObject.unit_price;
+    updatedInfo.shipping_cost = updateObject.shipping_cost;
+    updatedInfo.total_cost = updateObject.total_cost;
+    updatedInfo.address = updateObject.address;
+    updatedInfo.deliveryDate = updateObject.deliveryDate;
+    updatedInfo.orderOwner = updateObject.orderOwner;
+    updatedInfo.productId = updateObject.productId;
+    console.log(updatedInfo);
+    try {
+        const result = await orderdata.updateOrder(req.params.id,updatedInfo);
+        const allOrder = await orderdata.getAllOrder();
+        res.redirect("/allOrder");
+      } catch (e) {
+        res.sendStatus(e);
+      }
+      
+});
+
 module.exports = router;

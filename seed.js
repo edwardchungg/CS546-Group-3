@@ -1,10 +1,9 @@
 
 
 const dbConnection = require('./config/mongoConnection');
-const data = require('./data/');
-const user = data.user;
-const inventory = data.inventory;
-const orders = data.order;
+const user = require("./data/user")
+const inventory = require("./data/inventory")
+const order = require("./data/order")
 
 
 async function main() {
@@ -21,20 +20,24 @@ async function main() {
 
     // product 1 to 5
 
-    const product1 = await inventory.addInventory("Tile1","round","red","Abc",60,10,TL1);
-    const product2 = await inventory.addInventory("Tile2","square","blue","def",70,50,TL2);
-    const product3 = await inventory.addInventory("Tile3","triangle","yellow","pqr",50,10,TL3);
-    const product4 = await inventory.addInventory("Tile4","round","black","Abc",60,20,TL4);
-    const product5 = await inventory.addInventory("Tile5","square","green","xyz",60,10,TL5);
-
-
+    const product1 = await inventory.addInventory("Tile1","round","red","Abc",60,10,'TL1');
+    const product2 = await inventory.addInventory("Tile2","square","blue","def",70,50,'TL2');
+    const product3 = await inventory.addInventory("Tile3","triangle","yellow","pqr",50,10,'TL3');
+    const product4 = await inventory.addInventory("Tile4","round","black","Abc",60,20,'TL4');
+    const product5 = await inventory.addInventory("Tile5","square","green","xyz",60,10,'TL5');
     // order 1 to 5
 
-    const order1 = await order.addOrder(user1._id, product1._id, 5, 20, "49 Pershing place", "2021-10-21", true, "Dixa", product1.productId);
-    const order2 = await order.addOrder(user2._id, product2._id, 1, 50, "50 Pershing place", "2021-10-22", true, "Diya" , product2.productId);
-    const order3 = await order.addOrder(user3._id, product3._id, 5, 50, "48 Pershing place", "2022-10-21", false, "yang", product3.productId);
-    const order4 = await order.addOrder(user4._id, product4._id, 2, 40, "51 Pershing place", "2023-10-21", true, "edward", product4.productId);
-    const order5 = await order.addOrder(user5._id, product5._id, 6, 60, "52 Pershing place", "2025-10-21", true, "hp",product5.productId);
+    const product1_obj = await inventory.getInventoryById(product1);
+    const product2_obj = await inventory.getInventoryById(product2);
+    const product3_obj = await inventory.getInventoryById(product3);
+    const product4_obj = await inventory.getInventoryById(product4);
+    const product5_obj = await inventory.getInventoryById(product5);
+
+    const order1 = await order.addOrder(user1._id, product1._id, 5, 20, 5, "49 Pershing place", "2021-10-21", "Dixa", product1_obj.productId);
+    const order2 = await order.addOrder(user2._id, product2._id, 1, 50, 5, "50 Pershing place", "2021-10-22","Diya" , product2_obj.productId);
+    const order3 = await order.addOrder(user3._id, product3._id, 5, 50, 5, "48 Pershing place", "2022-10-21", "yang", product3_obj.productId);
+    const order4 = await order.addOrder(user4._id, product4._id, 2, 40, 5,"51 Pershing place", "2023-10-21", "edward", product4_obj.productId);
+    const order5 = await order.addOrder(user5._id, product5._id, 6, 60, 5,"52 Pershing place", "2025-10-21", "hp",product5_obj.productId);
 
 
 }
