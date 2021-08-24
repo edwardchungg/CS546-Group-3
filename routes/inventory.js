@@ -1,193 +1,150 @@
-const data = require('../data');
-const inventoryData = data.inventoryData;
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const data = require("../data");
+const xss = require("xss");
+const userdata = data.users;
+const inventorydata = data.inventory;
 
 
 
-router.get('/', async (req, res) => {
-    try {
-        const listOfAllinventory = await inventoryData.getAll();
-        res.status(200).render("inventory/viewProductList", { inventory: listOfAllinventory });
-    } catch (e) {
-        res.status(500);
-    }
-});
+router.get("/", async (req, res) => {
+    if (req.session.user) {
 
-router.get('/createProduction', async (req, res) => {
-    try {
-        res.status(200).render("inventory/createProduction");
-    } catch (e) {
-        res.status(500);
-    }
-});
+        const user = await userdata.getUserById(req.session.user._id);
+        const user_info = {
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            userRole: user.userRole,
+            address: user.address,
 
-router.get('/modify', async (req, res) => {
-    try {
-        let inventoryInfo = req.query;
-        res.status(200).render("inventory/modifyProduct", { inventory: inventoryInfo });
-    } catch (e) {
-        res.status(500);
-    }
-});
-
- //   To add inventory 
-
-router.post('/', async (req, res) => {
-    let inventoryInfo = req.body;
-
-    if (!inventoryInfo) {
-        res.status(400).json({error: "inventoryInfo is must to create a inventory"});
-    }
-    if (!inventoryInfo.productName) {
-        res.status(400).json({error: "Product Name is must to create a inventory"});
-    }   
-    if (!inventoryInfo.woodType) {
-        res.status(400).json({error: "woodType is must to create a inventory"});
-    }
-    if (!inventoryInfo.color) {
-        res.status(400).json({error: "color is must to create a inventory"});
-    }
-    if (!inventoryInfo.manufacturer) {
-        res.status(400).json({error: "manufacturer is must to create a inventory"});
-    }
-    if (!inventoryInfo.stock) {
-        res.status(400).json({error: "stock is must to create a inventory"});
-    }
-	if (!inventoryInfo.unitCost) {
-        res.status(400).json({error: "unitCost is must to create a inventory"});
-    }
-
-    try {
-        const createInventory = await inventoryData.create(inventoryInfo.productName, inventoryInfo.woodType, inventoryInfo.color, inventoryInfo.manufacturer, +inventoryInfo.stock, +inventoryInfo.unitCost, req.session.user.email);
-        res.redirect("/inventory");
-    } catch (e) {
-        res.status(400).json({error: e});
-    }
-});
-
-
- // To get inventory by id 
-
-router.get('/:id', async (req, res) => {
-    if (!req.params.id) {
-        res.status(400).json({ error: 'inventory_Id is must' });
-    }
-
-    try {
-        const inventory = await inventoryData.getById(req.params.id);
-        res.status(200).render("inventory/viewProductDetails", { inventory: inventory });
-    } catch (e) {
-        res.status(404).json({error: `inventory not found with inventory_id: ${req.params.id}.`});
-    }
-});
-
-
- // A put request, to update information for the inventory,
-
-router.post('/:id', async (req, res) => {
-    if (!req.params.id) {
-        res.status(400).json({ error: 'inventory_Id is must' });
-    }
-
-    let inventoryInfo = req.body;
-
-	if (!inventoryInfo) {
-        res.status(400).json({error: "inventoryInfo is must to create a inventory"});
-    }
-    if (!inventoryInfo.productName) {
-        res.status(400).json({error: "Product Name is must to create a inventory"});
-    }   
-    if (!inventoryInfo.woodType) {
-        res.status(400).json({error: "woodType is must to create a inventory"});
-    }
-    if (!inventoryInfo.color) {
-        res.status(400).json({error: "color is must to create a inventory"});
-    }
-    if (!inventoryInfo.manufacturer) {
-        res.status(400).json({error: "manufacturer is must to create a inventory"});
-    }
-    if (!inventoryInfo.stock) {
-        res.status(400).json({error: "stock is must to create a inventory"});
-    }
-	if (!inventoryInfo.unitCost) {
-        res.status(400).json({error: "unitCost is must to create a inventory"});
-    }
-
-    try {
-        await inventoryData.getById(req.params.id);
-    } catch (e) {
-        res.status(404).json({error: `inventory not found with inventory_id: ${req.params.id}.`});
-        return;
-    }
-
-    try {
-        const inventory = await inventoryData.update(req.params.id, {
-            ...inventoryInfo,
-            createdBy: req.session.user.email
-        });
-        res.redirect("/inventory");
-    } catch (e) {
-        res.status(400).json({error: e});
-    }
-});
-
-
- //  patch request
-
-router.patch('/:id', async (req, res) => {
-    if (!req.params.id) {
-        res.status(400).json({ error: 'inventory_Id is must' });
-        return;
-    }
-
-    const requestBody = req.body;
-    let updateInventory= {};
-
-    try { // see if you can find the inventory and then set values to what's changed
-        const theInventory = await inventoryData.getById(req.params.id);
-
-        if (requestBody.productName && requestBody.productName !== theInventory.title) updateInventory.productName = requestBody.productName;
-		if (requestBody.woodType && requestBody.woodType !== theInventory.woodType) updateInventory.woodType = requestBody.woodType;
-		if (requestBody.color && requestBody.color !== theInventory.color) updateInventory.color = requestBody.color;
-		if (requestBody.manufacturer && requestBody.manufacturer !== theInventory.manufacturer) updateInventory.manufacturer = requestBody.manufacturer;
-		if (requestBody.stock && requestBody.stock !== theInventory.stock) updateInventory.stock = requestBody.stock;
-		if (requestBody.unitCost && requestBody.unitCost !== theInventory.unitCost) updateInventory.unitCost = requestBody.unitCost;
-		if (requestBody.createdBy && requestBody.createdBy !== theInventory.createdBy) updateInventory.createdBy = requestBody.createdBy;
-		
-
-    } catch (e) {
-        res.status(404).json({error: `inventory not found with inventory_id: ${req.params.id}.`});
-    }
-
-    if (Object.keys(updateInventory).length !== 0) {
-        try {
-            const updateInventory = await InventoryData.update(req.params.id, requestBody);
-            res.status(200).json(updateInventory);
-        } catch (e) {
-            res.status(400).json({error: e});
-        }
+        };
+        res.render("pages/addInventory");
     } else {
-        res.status(400).json({error: "CurrentDetails = NewDetails, No change has been Given"});
+        res.status(500).redirect("/login");
     }
 });
 
-router.post('/delete/:id', async (req, res) => {
-    if (!req.params.id) {
-        res.status(400).json({ error: 'Inventory Id is must' });
+router.get("/", async (req, res) => {
+    res.render("pages/addInventory");
+});
+
+router.post("/", async (req, res) => {
+    let newInventory = JSON.parse(JSON.stringify(req.body));
+
+    if (!req.body) {
+        res.status(400).json({ error: "You must provide body" });
+        return;
+    }
+    if (!newInventory.productName) {
+        res.status(400).json({ error: "You must provide ProductName" });
+        return;
+    }
+    if (!newInventory.productType) {
+        res.status(400).json({ error: "You  must provide productType" });
+        return;
+    }
+    if (!newInventory.color) {
+        res.status(400).json({ error: "You must provide color" });
+        return;
+    }
+    if (!newInventory.manufacturer) {
+        res.status(400).json({ error: "You must provide manufacturer" });
+        return;
+    }
+    if (!newInventory.stock) {
+        res.status(400).json({ error: "You must provide stock" });
+        return;
+    }
+    if (!newInventory.price) {
+        res.status(400).json({ error: "You must provide price" });
+        return;
+    }
+    if (!newInventory.productId) {
+        res.status(400).json({ error: "You must provide ProductId" });
+        return;
     }
 
+
     try {
-         await inventoryData.getById(req.params.id);
+        
+        if (await inventorydata.getInventoryByProductId(newInventory.productId)) {
+            await inventorydata.addInventory(
+                xss(newInventory.productName),
+                xss(newInventory.productType),
+                xss(newInventory.color),
+                xss(newInventory.manufacturer),
+                xss(newInventory.stock),
+                xss(newInventory.price),
+                xss(newInventory.productId)
+            );
+            //req.session.user = await userdata.getUserByEmail(newUser.email);
+            //res.cookie("name", "auth_cookie");
+            res.redirect("/inventory/all");
+        } else {
+            res.status(401).render('pages/addInventory', { title: 'Error In AddInventory', error: "ProductId is Unique and there is already a product Exist of same ProductId!" });
+        }
     } catch (e) {
-        res.status(404).json({error: `product not found with inventory_id: ${req.params.id}.`});
-    }
-    try {
-        let deleteInventory = await inventoryData.delete(req.params.id);
-        res.redirect("/inventory");
-    } catch (e) {
-        res.status(500).json({error: e});
+        res.status(500).json({ error: e });
     }
 });
+
+router.get("/all", async (req, res) => {
+    if (req.session.user) {
+
+        const allInventory = await inventorydata.getAllInventory();
+        
+        res.render("pages/inventoryList", {
+            inventory: allInventory,
+        });
+    } else {
+        res.status(500).redirect("/private");
+    }
+});
+
+router.get("/deleteInventory/:pid", async (req, res) => {
+    if (req.session.user) {
+        try {
+            const curr_inventory = await inventorydata.removeInventory(req.params.pid);
+            if (curr_inventory) {
+                return res.redirect("/inventory/all");
+
+            } else {
+            
+                    res.status(401).render('pages/inventoryList', { title: 'Failed', error: "Product cannot delete" });
+            
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+    } else {
+        return res.status(500).redirect("/login");
+    }
+});
+
+//Individual inventory page
+router.get("/:p_id", async (req, res) => {
+    try {
+        const curr_inventory = await inventorydata.getInventoryById(req.params.p_id);
+        
+        return res.render("pages/inventory_page", {
+            productName: curr_inventory.productName,
+            productType: curr_inventory.productType,
+            color: curr_inventory.color,
+            manufacturer: curr_inventory.manufacturer,
+            stock: curr_inventory.stock,
+            price: curr_inventory.price,
+            productId: curr_inventory.productId,
+            
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(400).render("errors/common_error", {
+            error: { message: "Could not find the inventory of given ID." },
+        });
+    }
+});
+
 
 module.exports = router;
