@@ -17,11 +17,13 @@ router.post("/", async (req, res) => {
     let newUser = JSON.parse(JSON.stringify(req.body));
     try {
         await userdata.updateUser(ObjectId(req.session.user._id),newUser);
-        req.session.user = await userdata.getUserById(ObjectId(req.session.user._id));
+        req.session.user = await userdata.getUserById(req.session.user._id);
         res.cookie("name", "auth_cookie");
         res.redirect("/private");
     } catch (e) {
-        res.status(500).json({ error: e });
+        return res.render("errors/common_error", {
+            error: { message: e},
+          });
     }
 });
 

@@ -34,13 +34,11 @@ let exportedMethods = {
 
 
     async addInventory(productName, productType, color, manufacturer, stock, price, productId) {
-
+        console.log(productId);
         if (typeof productName != "string") throw "invalid name - addInventory";
         if (typeof productType != "string") throw "invalid productType - addInventory";
         if (typeof color != "string") throw "invalid color - addInventory";
         if (typeof manufacturer != "string") throw "invalid manufacturer - addInventory";
-        if (typeof stock != "string") throw "invalid stock - addInventory";
-        if (typeof price != "string") throw "invalid price - addInventory";
         if (typeof productId != "string") throw "invalid productId - addInventory";
 
         let newInventory = {

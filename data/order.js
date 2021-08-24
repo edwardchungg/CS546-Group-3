@@ -34,7 +34,6 @@ let exportedMethods = {
     async addOrder(sellerId, product_id, totalQty, unit_price,shipping_cost, address, deliveryDate, orderOwner, productId) {
         if (!ObjectId.isValid(sellerId)) throw "invalid sellerId";
         if (!ObjectId.isValid(product_id)) throw "invalid product_id";
-        if (typeof totalQty != "string") throw "invalid totalQty";
         if (typeof address != "string") throw "invalid address";
         if (typeof deliveryDate != "string") throw "invalid deliveryDate";
         
@@ -43,7 +42,6 @@ let exportedMethods = {
         if (product.stock < totalQty){console.log('Not enough stock!');}
         product.stock = product.stock - totalQty;
         const updatedProductQty = await inventoryMethods.updateInventory(product_id,product);
-        console.log("Updated Product Stock!", updatedProductQty);
         const orderCollection = await order();
 
         let newOrder = {
@@ -59,7 +57,6 @@ let exportedMethods = {
             orderOwner: orderOwner,
             productId: productId,
         };
-        console.log(newOrder);
         const newInsertInformation = await orderCollection.insertOne(newOrder);
         if (newInsertInformation.insertedCount === 0) throw "Insert failed!";
         return newInsertInformation.insertedId;
@@ -88,7 +85,6 @@ let exportedMethods = {
     async updateOrder(id, updatedOrder) {
         if (!ObjectId.isValid(updatedOrder.sellerId)) throw "invalid sellerId";
         if (!ObjectId.isValid(updatedOrder.product_id)) throw "invalid product_id";
-        if (typeof updatedOrder.totalQty != "string") throw "invalid totalQty";
         if (typeof updatedOrder.address != "string") throw "invalid address";
         if (typeof updatedOrder.deliveryDate != "string") throw "invalid deliveryDate";
         if (typeof updatedOrder.orderOwner != "string") throw "invalid orderOwner";
