@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hahahakkkE7/CS546-FinalProject-Group10.git"
+    "url": ""
   },
-  "author": "Dixa Patel",
+  "author": "Dixaben Patel\r - Edward Chung\r - Yang Dai",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hahahakkkE7/CS546-FinalProject-Group10/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/hahahakkkE7/CS546-FinalProject-Group10#readme",
+  "homepage": "",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "express": "^4.17.1",
