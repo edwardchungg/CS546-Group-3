@@ -7,8 +7,12 @@
                     <th>Product ID</th>
                     <th>Owner/seller</th>
                     <th>Qty</th>
-                    <th>Order Total</th>
-                    <th>Delievry Date</th>
+                    <th>Unit Price</th>
+                    <th>Shipping Cost</th>
+                    <th>Total Cost</th>
+                    <th>Delivery Date</th>
+                    <th>Destination:</th>
+                    <th>Delivered?</th>
                 </tr>
             </thead>
             <tbody>
@@ -18,11 +22,15 @@
                     <td>{{this.productId}}</td>
                     <td>{{this.orderOwner}}</td>
                     <td>{{this.totalQty}}</td>
-                    <td>{{this.order_cost}}</td>
+                    <td>${{this.unit_price}}</td>
+                    <td>${{this.shipping_cost}}</td>
+                    <td>${{total_cost}}</td>
                     <td>{{this.deliveryDate}}</td>
+                    <td><a href="{{this.address}} "onclick="getLink(event,'{{this.address}}')">{{this.address}}</a></td>
+                    <td>{{this.deliveryStatus}}</td>
                     <td>
-                        <a href="/inventoryUpdate/{{this._id}}" class="ui mini basic teal button">Update</a>
-                        <a href="/inventory/deleteInventory/{{this._id}}" class="ui mini basic red button">Delete</a>
+                        <a href="/allOrder/update/{{this._id}}"  class="ui mini basic teal button"> Confirm Delivery </a>           
+                        <a href="/allOrder/deleteOrder/{{this._id}}" class="ui mini basic red button">Delete</a>
                     </td>
                 </tr>
                 {{/each}}

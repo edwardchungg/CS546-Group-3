@@ -16,8 +16,8 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/:pid", async (req, res) => {
-    
     let newInventory = JSON.parse(JSON.stringify(req.body));
+    console.log(newInventory);
     if (!req.body) {
         res.status(400).json({ error: "You must provide all information" });
         return;
@@ -25,12 +25,15 @@ router.post("/:pid", async (req, res) => {
     try {
         let orderInventory = await inventorydata.getInventoryById(ObjectId(req.params.pid),newInventory);
         if(orderInventory){
+
+
             // let order_cost = newInventory.totalQty * orderInventory.price
             await orderdata.addOrder(
             xss(req.session.user._id),
             xss(orderInventory._id),
             xss(newInventory.totalQty),
-            xss(orderInventory.price),
+            xss(newInventory.unit_price),
+            xss(newInventory.shipping_cost),
             xss(newInventory.address),
             xss(newInventory.deliveryDate),
             xss(req.session.user.firstName),
@@ -44,7 +47,9 @@ router.post("/:pid", async (req, res) => {
               });
         }
     } catch (e) {
-        res.status(500).json({ error: e });
+        return res.render("errors/common_error", {
+            error: { message: e},
+          });
     }
 });
 
