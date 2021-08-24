@@ -1,161 +1,185 @@
-const mongoCollections = require('../config/mongoCollection');
-const mongo = require('mongodb');
-const {ObjectId} = require('mongodb');
-const users = mongoCollections.users;
+const bcrypt = require("bcrypt");
+const saltRounds = 8;
+var BSON = require("mongodb");
+const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Types;
+const mongoCollections = require("../config/mongoCollection");
+const users = mongoCollections.user;
+const order = mongoCollections.order;
 
 let exportedMethods = {
-    async get() {
-        const userCollection = await users();
-        const userList = await userCollection.find({}).toArray();
-        if (!userList) throw 'No users in system!';
-        return userList;
-    },
-    async getById(id){
-        if (!id) throw 'You must provide an id to search for';
-        if (typeof id != "string") throw 'Id must be of type string';
-        let uid;
-        try {
-            uid = ObjectId(id);
-        }
-        catch(e){
-            throw 'Id must be of type ObjectId'
-        }
-        
-        const userCollection = await users();
-        const foundUser = await userCollection.findOne({_id: uid});
-        if (!foundUser ) throw 'User not found';
-        return foundUser;    
-    },
-    async getByEmail(email){
-        if (!email) throw 'You must provide a Email';
-        if (typeof email != "string") throw 'email must be of type string';
-        
-        const userCollection = await users();
-        const foundUser = await userCollection.findOne({email: email});
-        if (!foundUser ) throw 'User not found';
-        return foundUser;    
-    },
-    async emailExists(email){
-        if (!email) throw 'You must provide a Email';
-        if (typeof email != "string") throw 'email must be of type string';
-        
-        const userCollection = await users();
-        const foundUser = await userCollection.findOne({email: email});
-        return !!foundUser; 
-    },
-    async getByUsername(username){
-        if (!username) throw 'You must provide a username to search for';
-        if (typeof username != "string") throw 'Username must be of type string';
-        
-        const userCollection = await users();
-        const foundUser = await userCollection.findOne({username: username});
-        if (!foundUser ) throw 'User not found';
-        return foundUser;    
-    },
-    async checkUser(username, password){
-        if (!username) throw 'You must provide a username to search for';
-        if (typeof username != "string") throw 'Username must be of type string';
-        
-        const userCollection = await users();
-        const foundUser = await userCollection.findOne({username: username});
-        if (!foundUser ) throw 'User not found';
-        if(foundUser.hashedPassword != password) throw "Invalid Password"
-        return foundUser;    
-    },
-    async create(firstName, lastName, email, username, userRole, address, password){
-        
-        if (!firstName) throw 'You must provide a name!';
-        if (!lastName) throw 'You must provide a last name!';
-        if (!email) throw 'You must provide an email!';
-        if (!username) throw 'You must provide an username!';
-        if (!userRole) throw 'You must provide a role!';
-        if (!address) throw 'You must provide an address!';
-        if (!password) throw 'You must provide a password!';
-   
 
-        if (typeof firstName != "string") throw 'You must provide a string for the first name';
-        if (typeof lastName != "string") throw 'You must provide a string for the last name';
-        if (typeof email != "string") throw 'You must provide a string for the email';
-        if (typeof username != "string") throw 'You must provide a string for the username';
-        if (typeof userRole != "string") throw 'You must provide a string for the address ';
-        if (typeof address != "string") throw 'You must provide a string for the last name';
-        if (typeof password != "string") throw 'You must provide a string for the password';
+  async getAllUsers() {
+    const userData = await users();
+    const allusers = await userData.find({}).toArray();
+    if (!allusers) throw "empty database";
+    return allusers;
+  },
+
+  async getUserById(id) {
+    const userData = await users();
+    const user = await userData.findOne({ _id: ObjectId(id) });
+    if (!user) throw "User not found";
+    return user;
+  },
+
+  async getUserByEmail(email) {
+    const userData = await users();
+    const user = await userData.findOne({ email: email });
+    if (!user) throw "User not found hahah";
+    const cookie = {
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    };
+    return cookie;
+  },
+
+  async checkuserByEmail(email) {
+    if (typeof email != "string") {
+      throw "email type is error.";
+    }
+    const usersCollection = await users();
+    const repe = await usersCollection.findOne({ email: email });
+    if (repe != null) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+
+  async checkUser(email, password) {
+    if (typeof email != "string") {
+      throw "email type is error.";
+    }
+    const usersCollection = await users();
+    const repe = await usersCollection.findOne({ email: email });
+    if (repe == null) {
+      return false;
+    }
+    const db_password = repe.password;
+    let authenticated = await bcrypt.compare(password, db_password);
+    if (authenticated) {
+      return true;
+    } else {
+      return false;
+    }
+  },
 
 
+  async addUser(email, password, firstName, lastName, userRole, address) {
+    const userData = await users();
 
-        let newUser = {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            username: username,
-            userRole: userRole,
-            address: address,
-            hashedPassword: password
-        }
-        const userCollection = await users();
-        const insertInfo = await userCollection.insertOne(newUser);
-        if (insertInfo.insertedCount === 0) throw 'Could not add user';
-    
-        const newId = insertInfo.insertedId;
-        const user = await this.getById(newId.toString());
-        return user;    
-    },
-    async update(id,user){
-        if (!id) throw 'An id is required';
-    
-        if (typeof id != "string"){
-            throw 'Provided id must be of type string';
-        }
-        let uid;
-        try {
-            uid = ObjectId(id);
-        }
-        catch(e){
-            throw 'Id must be of type ObjectId'
-        }
-        const oldUser = await this.getById(id);
-        const updatedUser = {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: email.lastName,
-            username: user.lastName,
-            hashedPassword: user.hashedPassword,
-            userRole: user.userRole,
-            address: user.address
+    //error check
+    if (typeof email != "string") throw "invalid email";
+    if (typeof password != "string") throw "invalid password";
+    if (typeof firstName != "string") throw "invalid firstname";
+    if (typeof lastName != "string") throw "invalid lastName";
+    if (typeof address != "string") throw "invalid address";
+    if (typeof userRole != "string") throw "invalid userRole";
 
-        }
-        const userCollection = await users();
-        const updatedInfo = await userCollection.updateOne(
-            {_id:uid},
-            { $set: updatedUser }
-        );
-        const foundUser = await userCollection.findOne({_id: uid});
-        return foundUser;
-    },
-    async delete(id){
-        if (!id) throw 'An id is required';
-    
-        if (typeof id != "string"){
-            throw 'Provided id must be of type string';
-        }
-        let uid;
-        try {
-            uid = ObjectId(id);
-        }
-        catch(e){
-            throw 'Id must be of type ObjectId'
-        }
-        const userCollection = await users();
-        const foundUser = await userCollection.findOne({_id:uid});
-        if (!foundUser) throw 'User not found with that id';
-        const deletionInfo = await userCollection.deleteOne({_id:uid});
-        const result = {
-            userId: id,
-            deleted: true
-        }
-        return result;
+    let newpass = await bcrypt.hash(password, saltRounds);
+
+    let newUser = {
+      email: email,
+      password: newpass,
+      firstName: firstName,
+      lastName: lastName,
+      userRole: userRole,
+      address: address,
+      orderId: [],
+
+    };
+
+    const insertUser = await userData.insertOne(newUser);
+    if (insertUser.insertedCount === 0) throw "Insert failed!";
+    return await this.getUserById(insertUser.insertedId);
+  },
+
+  async removeUser(id) {
+    const userData = await users();
+    const deletedUser = await userData.removeOne({
+      _id: BSON.ObjectID.createFromHexString(id),
+    });
+    if (deletedUser.deletedCount === 0) {
+      throw `Could not delete user with id of ${id}`;
+    }
+    return true;
+  },
+  async updateUser(id, updatedUser) {
+    let oldUser = await this.getUserById(id);
+    let updateUser = {
+      email: oldUser.email,
+      password: oldUser.password,
+      firstName: oldUser.firstName,
+      lastName: oldUser.lastName,
+      userRole: oldUser.userRole,
+      address: oldUser.address,
+      orderId: oldUsery.orderId
+    };
+    if (updatedUser.email != "" && typeof updatedUser.email == "string") {
+      updateUser.email = updatedUser.email.toLowerCase();
+    }
+    if (updatedUser.password != "" && typeof updatedUser.password == "string") {
+      let newpass = await bcrypt.hash(updatedUser.password, saltRounds);
+      updateUser.password = newpass;
+    }
+    if (
+      updatedUser.firstname != "" &&
+      typeof updatedUser.firstname == "string"
+    ) {
+      updateUser.firstName = updatedUser.firstname;
+    }
+    if (updatedUser.lastname != "" && typeof updatedUser.lastname == "string") {
+      updateUser.lastName = updatedUser.lastname;
+    }
+    if (updatedUser.address != "" && typeof updateUser.address == "string") {
+      updateUser.address = updatedUser.address;
+    }
+    if (updatedUser.userRole != "" && typeof updateUser.userRole == "string") {
+      updateUser.userRole = updatedUser.userRole;
     }
 
-}
+    const userData = await users();
+
+    const updatedInfo = await userData.updateOne(
+      { _id: id },
+      { $set: updateUser }
+    );
+
+    if (!updatedInfo.matchedCount && !updatedInfo.modifiedCount)
+      throw "Update failed";
+    return;
+  },
+
+  // user interactive with order (add order)
+  async addOrderToUser(userId, orderID) {
+    const userCollection = await users();
+    const updateInfo = await userCollection.updateOne(
+      { _id: ObjectId(userId) },
+      { $addToSet: { orderId: { id: ObjectId(orderID) } } }
+    );
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+      throw "Add order to user failed";
+
+    return;
+  },
+
+  // remove the order
+  async removeOwnedOrderId(userId, orderID) {
+    const userCollection = await users();
+    const updateInfo = await userCollection.updateOne(
+      { _id: ObjectId(userId) },
+      { $pull: { orderId: { id: ObjectId(orderID) } } }
+    );
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+      throw "Update failed";
+
+    return;
+  },
+
+
+};
 
 module.exports = exportedMethods;

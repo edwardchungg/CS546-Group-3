@@ -4,14 +4,13 @@
   "description": "- Dixaben Patel\r - Edward Chung\r - Yang Dai",
   "main": "index.js",
   "dependencies": {
-    "bcrypt": "^5.0.1",
-    "cookie-parser": "^1.4.5",
+    "bcrypt": "^5.0.0",
     "express": "^4.17.1",
-    "express-handlebars": "^5.3.3",
-    "express-session": "^1.17.2",
-    "handlebars": "^4.7.7",
-    "mongodb": "^4.1.0",
-    "xss": "^1.0.9"
+    "express-handlebars": "^5.2.0",
+    "express-session": "^1.17.1",
+    "handlebars": "^4.7.6",
+    "mongoose": "^5.11.7",
+    "xss": "^1.0.8"
   },
   "devDependencies": {},
   "scripts": {
