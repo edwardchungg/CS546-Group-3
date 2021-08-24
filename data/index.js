@@ -1,4 +1,4 @@
-const users = require('./user');
+const users = require('./users');
 const inventory = require('./inventory');
 const order = require('./order');
 
