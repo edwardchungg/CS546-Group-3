@@ -2,6 +2,7 @@
 
 
 
-Open Terminal 
-Run npm install
-Run npm start
+## Open Terminal 
+## Run npm install
+## Run node seed.js
+## Run npm start
