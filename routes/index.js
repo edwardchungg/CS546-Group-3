@@ -1,24 +1,33 @@
-
-// const privateRoute = require("./private");
-const userDeleteRoute = require("./userDeleteRoute");
-const userRoutes = require("./user");
+const registerRoute = require("./register");
+const loginRoute = require("./login");
+const privateRoute = require("./private");
+const logoutRoute = require("./logout");
+const userUpdateRoute = require("./userUpdateRoute");
 const inventoryRoutes = require("./inventory");
-// const orderRoutes = require("./orderRoutes");
+const inventoryUpdateRoute = require("./inventoryUpdate");
+const buyInventoryRoutes = require("./buyInventory");
+const allOrderRoutes = require("./allOrder");
+
 
 const constructorMethod = (app) => {
   app.get("/", function (req, res) {
-    res.render("auth/login");
+    res.render("pages/index");
   });
-  app.use("/user", userRoutes);
+  app.use("/register", registerRoute);
+  app.use("/login", loginRoute);
+  app.use("/logout", logoutRoute);
+  app.use("/private", privateRoute);
+  app.use("/userUpdate", userUpdateRoute);
+  app.use("/inventoryUpdate", inventoryUpdateRoute);
   app.use("/inventory", inventoryRoutes);
-  // app.use("/order", orderRoutes);
+  app.use("/buyInventory", buyInventoryRoutes);
+  app.use("/allOrder", allOrderRoutes);
   app.get("/getSession", async (req, res) => {
     if (req.session.user) {
       res.json({ result: true, name: req.session.user.email });
       return;
     }
     res.json({ result: false });
-    //res.json({};)
     return;
   });
 };
