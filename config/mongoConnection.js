@@ -1,9 +1,13 @@
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/VGRS');
 const MongoClient = require('mongodb').MongoClient;
-
-const mongoConfig = {
-  serverUrl: 'mongodb://localhost:27017/',
-  database: 'Warehouse'
+const settings = {
+  mongoConfig: {
+    serverUrl: 'mongodb://localhost:27017/',
+    database: 'PCDTiles'
+  }
 };
+const mongoConfig = settings.mongoConfig;
 
 let _connection = undefined;
 let _db = undefined;

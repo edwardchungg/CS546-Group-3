@@ -1,4 +1,4 @@
-const mongoCollections = require('../config/mongoCollections');
+const mongoCollections = require('../config/mongoCollection');
 const mongo = require('mongodb');
 const {ObjectId} = require('mongodb');
 const users = mongoCollections.users;

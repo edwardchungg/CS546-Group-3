@@ -1,131 +1,149 @@
-const mongoCollections = require('../config/mongoCollections');
-const mongo = require('mongodb');
-const {ObjectId} = require('mongodb');
+const mongoCollections = require("../config/mongoCollection");
 const inventory = mongoCollections.inventory;
-const userMethods = require('./users');
+
+
+var BSON = require("mongodb");
+const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Types;
 
 let exportedMethods = {
-    async getAll() {
+
+    async getAllInventory() {
         const inventoryCollection = await inventory();
-        const inventoryArray = await inventoryCollection.find({}).toArray();
-        if (!inventoryArray) throw 'No products in system!';
-        return inventoryArray;
+        const allInventory = await inventoryCollection.find({}).toArray();
+        if (!allInventory) throw "empty database - getAllInventory";
+        return allInventory;
     },
-    async getById(id){
-        if (!id) throw 'You must provide an id to search for';
-        if (typeof id != "string") throw 'Id must be of type string';
-        let uid;
-        try {
-            uid = ObjectId(id);
-        }
-        catch(e){
-            throw 'Id must be of type ObjectId'
-        }
-        
+
+    async getInventoryById(id) {
         const inventoryCollection = await inventory();
-        const foundProduct = await inventoryCollection.findOne({_id: uid});
-        if (!foundProduct ) throw 'Product not found';
-        return foundProduct;    
+        const item = await inventoryCollection.findOne({ _id: ObjectId(id) });
+        if (!item) throw "inventory not found - getInventoryById";
+        return item;
     },
-    async create(productName, woodType, color, manufacturer, stock, unitCost, createdBy){
-        
-        if (!productName) throw 'You must provide a name!';
-        if (!woodType) throw 'You must provide a type of wood!';
-        if (!color) throw 'You must provide a color!';
-        if (!manufacturer) throw 'You must provide a manufacturer!';
-        // if (!productImage) throw 'You must provide an image!';
-        if (!stock) throw 'You must provide a quantity!';
-        if (!unitCost) throw 'You must provide a unit cost!';
-        if (!createdBy) throw 'You must provide a user!';
-   
 
-        if (typeof productName != "string") throw 'You must provide a string for the first name';
-        if (typeof woodType != "string") throw 'You must provide a string for the last name';
-        if (typeof color != "string") throw 'You must provide a string for the email';
-        if (typeof manufacturer != "string") throw 'You must provide a string for the manufacturer';
-        if (typeof stock != "number") throw 'You must provide a string for the last name';
-        if (typeof unitCost != "number") throw 'You must provide a string for the password';
-        if (typeof createdBy != "string") throw 'You must provide a string for the username';
-
-        // Validate User exists
-        if (!userMethods.getByUsername(createdBy)){
-            throw 'User does not exist!'
-        };
+    async getInventoryByProductId(productId) {
+        const inventoryCollection = await inventory();
+        const item = await inventoryCollection.findOne({ productId: productId });
+        if (item != null) {
+            return false;
+        } else {
+            return true;
+        }
+    },
 
 
-        let newProduct = {
+    async addInventory(productName, productType, color, manufacturer, stock, price, productId) {
+
+        if (typeof productName != "string") throw "invalid name - addInventory";
+        if (typeof productType != "string") throw "invalid productType - addInventory";
+        if (typeof color != "string") throw "invalid color - addInventory";
+        if (typeof manufacturer != "string") throw "invalid manufacturer - addInventory";
+        if (typeof stock != "string") throw "invalid stock - addInventory";
+        if (typeof price != "string") throw "invalid price - addInventory";
+        if (typeof productId != "string") throw "invalid productId - addInventory";
+
+        let newInventory = {
             productName: productName,
-            woodType: woodType,
+            productType: productType,
             color: color,
             manufacturer: manufacturer,
             stock: stock,
-            unitCost: unitCost,
-            createdBy: createdBy
-        }
+            price: price,
+            productId: productId,
+        };
+
         const inventoryCollection = await inventory();
-        const insertInfo = await inventoryCollection.insertOne(newProduct);
-        if (insertInfo.insertedCount === 0) throw 'Could not add product';
-    
-        const newId = insertInfo.insertedId;
-        const product = await this.getById(newId.toString());
-        return product;    
+        const newInsertInformation = await inventoryCollection.insertOne(newInventory);
+        if (newInsertInformation.insertedCount === 0) throw "Insert failed! - addInventory";
+        return newInsertInformation.insertedId;
     },
-    async update(id,product){
-        if (!id) throw 'An id is required';
+
+    async removeInventory(id) {
+        if (!id || typeof(id) !== 'string') throw `inventoryID: ${id} is Invalid. Please provide a BookId of string DataType.`;
+        const inventoryCollection = await inventory();
+
+        const deletedInventory = await inventoryCollection.removeOne({
+            _id: ObjectId(id),
+        });
+
+
+        if (deletedInventory.deletedCount === 0) {
+            throw `Could not delete inventory with id of ${id} -  deletedInventory`;
+        }
+        return true;
+    },
+
+
+    // async updateInventory(id, updatedInventory) {
+    //     let oldInventory = await this.getInventoryById(id);
+    //     let updateInventory = {
+    //       productName: oldInventory.productName,
+    //       productType: oldInventory.productType,
+    //       color: oldInventory.color,
+    //       manufacturer: oldInventory.manufacturer,
+    //       stock: oldInventory.stock,
+    //       price: oldInventory.price,
+    //     };
+    //     if (updatedInventory.email != "" && typeof updatedInventory.email == "string") {
+    //         updateInventory.email = updatedInventory.email.toLowerCase();
+    //     }
+    //     if (updatedInventory.password != "" && typeof updatedInventory.password == "string") {
+    //       let newpass = await bcrypt.hash(updatedInventory.password, saltRounds);
+    //       updateInventory.password = newpass;
+    //     }
+    //     if (updatedInventory.firstname != "" && typeof updaupdatedInventorytedUser.firstname == "string") {
+    //         updateInventory.firstName = updatedInventory.firstname;
+    //     }
+    //     if (updatedInventory.lastname != "" && typeof updatedInventory.lastname == "string") {
+    //         updateInventory.lastName = updatedInventory.lastname;
+    //     }
+    //     if (updatedInventory.address != "" && typeof updatedInventory.address == "string") {
+    //         updateInventory.address = updatedInventory.address;
+    //     }
+    //     if (updatedInventory.userRole != "" && typeof updatedInventory.userRole == "string") {
+    //         updateInventory.userRole = updatedInventory.userRole;
+    //     }
     
-        if (typeof id != "string"){
-            throw 'Provided id must be of type string';
-        }
-        let uid;
-        try {
-            uid = ObjectId(id);
-        }
-        catch(e){
-            throw 'Id must be of type ObjectId'
-        }
-        const oldProduct = await this.getById(id);
-        const updatedProduct = {
-            productName: product.productName,
-            woodType: product.woodType,
-            color: product.color,
-            manufacturer: product.manufacturer,
-            stock: product.stock,
-            unitCost: product.unitCost,
-            createdBy: product.createdBy
-        }
+    //     const inventoryData = await inventory();
+    
+    //     const updatedInfo = await inventoryData.updateOne(
+    //       { _id: ObjectId(id) },
+    //       { $set: updateInventory }
+    //     );
+    
+    //     if (updatedInfo.matchedCount && updatedInfo.modifiedCount){
+    //        return true;
+    //     }
+    //     else{
+    //         return false;
+    //     }
+    //   },
+    async updateInventory(id, updatedInventory) {
+        let updateInventory = {
+            productName: updatedInventory.productName,
+            productType: updatedInventory.productType,
+            color: updatedInventory.color,
+            manufacturer: updatedInventory.manufacturer,
+            stock: updatedInventory.stock,
+            price: updatedInventory.price,
+            productId: updatedInventory.productId,
+        };
+
         const inventoryCollection = await inventory();
         const updatedInfo = await inventoryCollection.updateOne(
-            {_id:uid},
-            { $set: updatedProduct }
+            { _id: ObjectId(id) },
+            { $set: updateInventory }
         );
-        const foundProduct = await inventoryCollection.findOne({_id: uid});
-        return foundProduct;
-    },
-    async delete(id){
-        if (!id) throw 'An id is required';
-    
-        if (typeof id != "string"){
-            throw 'Provided id must be of type string';
+        if (updatedInfo.modifiedCount){
+            return true;
         }
-        let uid;
-        try {
-            uid = ObjectId(id);
+        else{
+            return false;
         }
-        catch(e){
-            throw 'Id must be of type ObjectId'
-        }
-        const inventoryCollection = await inventory();
-        const foundProduct = await inventoryCollection.findOne({_id:uid});
-        if (!foundProduct) throw 'Product not found with that id';
-        const deletionInfo = await inventoryCollection.deleteOne({_id:uid});
-        const result = {
-            productId: id,
-            productName: foundProduct.productName,
-            deleted: true
-        }
-        return result;
-    }
 
-}
+    },
+
+};
 
 module.exports = exportedMethods;
